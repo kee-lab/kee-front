@@ -34,7 +34,7 @@ const ResourceManagement = lazy(() => import("./resources"));
 const FilesPage = lazy(() => import("./files"));
 const GuestLogin = lazy(() => import("./guest"));
 const ChatPage = lazy(() => import("./chat"));
-const HomePage = lazy(() => import("./home"));
+const HomePage = lazy(() => import("./friend/home"));
 
 let toastId: string;
 const PageRoutes = () => {
