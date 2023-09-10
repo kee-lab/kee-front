@@ -15,12 +15,20 @@ function HomePage() {
   const linkClass = `flex items-center gap-2.5 px-3 py-2 font-semibold text-sm text-gray-600 rounded-lg md:hover:bg-gray-800/10`;
   return (
     <div className="flex-center h-screen dark:bg-gray-700">
-      <div className="relative py-8 px-10 shadow-md rounded-xl">friend.io</div>
-      <div className="py-8 px-10 shadow-md rounded-xl">the marketplace for your friend</div>
-      <div className="py-8 px-10 shadow-md rounded-xl">
-        <NavLink className="bg-primary-400 md:hover:bg-primary-400" to={"/login"}>
-          login
-        </NavLink>
+      <div className="relative py-8 px-10 shadow-md rounded-xl">
+        <div className="flex-center flex-col pb-6">
+          <h2 className="font-semibold text-2xl text-gray-800 dark:text-white">friend.io</h2>
+        </div>
+        <div className="flex-center flex-col pb-6">
+          <div className="font-semibold text-2xl text-gray-800 dark:text-white">
+            the marketplace for your friend
+          </div>
+        </div>
+        <div className="flex-center flex-col pb-6">
+          <NavLink className="bg-primary-400 md:hover:bg-primary-400" to={"/register"}>
+            sign in
+          </NavLink>
+        </div>
       </div>
     </div>
   );
