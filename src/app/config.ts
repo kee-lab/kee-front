@@ -20,6 +20,8 @@ const local_dev = `http://localhost:8080`;
 // const local_dev = `http://localhost:3000`;
 const dev_origin = process.env.REACT_APP_OFFICIAL_DEMO ? official_dev : local_dev;
 
+export const TWITTER_CLIENT_ID = 'VDJXUzBESDhhUDlyWjBDa0FtckE6MTpjaQ';
+
 // const local_dev = `https://im.ttt.td`;
 export const BASE_ORIGIN = process.env.REACT_APP_RELEASE ? `${location.origin}` : dev_origin;
 export const IS_OFFICIAL_DEMO = BASE_ORIGIN === official_dev;
