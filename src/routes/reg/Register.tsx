@@ -23,7 +23,7 @@ import { useMagicToken } from "./index";
 import SignInLink from "./SignInLink";
 
 interface AuthForm {
-  name?: string;
+  // name?: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -46,7 +46,7 @@ export default function Register() {
 
   const navigateTo = useNavigate();
   const [input, setInput] = useState<AuthForm>({
-    name: "",
+    // name: "",
     email: "",
     password: "",
     confirmPassword: ""
@@ -85,11 +85,12 @@ export default function Register() {
 
   const handleReg = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const { name, email, password, confirmPassword } = input;
+    const { email, password, confirmPassword } = input;
     if (password !== confirmPassword) {
       toast.error("Not Same Password!");
       return;
     }
+    debugger;
     const { data: canReg } = await checkEmail(email);
     if (canReg) {
       if (magic_token) {
@@ -101,7 +102,7 @@ export default function Register() {
       } else {
         // 带用户名的注册
         register({
-          name,
+          // name,
           email,
           password
         });
@@ -135,7 +136,7 @@ export default function Register() {
     return (
       <span className="dark:text-white">Sign up method is updated to Invitation Link Only</span>
     );
-  const { name, email, password, confirmPassword } = input;
+  const { email, password, confirmPassword } = input;
   if (data?.mail_is_sent) return <EmailNextTip />;
   const isLoading = registering || signingUp || checkingEmail;
 
@@ -159,7 +160,7 @@ export default function Register() {
         autoComplete={"true"}
       >
         {/* 不存在 magic token */}
-        {!magic_token && (
+        {/* {!magic_token && (
           <Input
             className="large"
             name="name"
@@ -170,7 +171,7 @@ export default function Register() {
             data-type="name"
             onChange={handleInput}
           />
-        )}
+        )} */}
         <Input
           className="large"
           name="email"
