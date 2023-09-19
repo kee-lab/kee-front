@@ -16,4 +16,12 @@ https://dev.voce.chat/api/favorite
 
 ws://localhost:3009/ws
 
-https://accounts.google.com/gsi/select?client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com&ux_mode=popup&ui_mode=card&as=ZoQvWDz%2BE8eoKaVvjTnq1g&channel_id=b51cf62f96ab1509e32123729d0c907a643051e41248a5f99a2b4d2c00354dd1&origin=http%3A%2F%2Flocalhost%3A3009
+https://accounts.google.com/gsi/select?client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com&ux_mode=popup&ui_mode=card&as=ZoQvWDz%2BE8eoKaVvjTnq1g&channel_id=b51cf62f96ab1509e32123729d0c907a643051e41248a5f99a2b4d2c00354dd1&origin=http%3A%2F%2F127.0.0.1%3A3009
+
+https://accounts.google.com/gsi/select?client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com&ux_mode=popup&ui_mode=card&as=PhsKnU984nVuSv3ikSWOPA&channel_id=5cdf8b7a6e6b89ad4c7471f12eef6c1ee046e56392308a52026a277c049c899e&origin=http%3A%2F%2F127.0.0.1%3A3009
+
+198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com
+
+https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http%3A//127.0.0.1:3000/api/google/auth&client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com
+
+https://accounts.google.com/gsi/select?client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com&ux_mode=popup&ui_mode=card&as=MWmr5fy9%2FR9Ap09DxZBJAQ&channel_id=e145b07f329dfa029b0b67727687fe88909d31c42eac2dbb105083e478636a14&origin=http://127.0.0.1:3009/
