@@ -13,6 +13,7 @@ import { StoredUser } from "./users";
 
 interface State {
   initialized: boolean;
+  authTwitter: boolean;
   guest: boolean;
   user: StoredUser | undefined;
   token: string;
@@ -24,6 +25,7 @@ interface State {
 const loginUser = localStorage.getItem(KEY_LOGIN_USER) || "";
 const initialState: State = {
   initialized: true,
+  authTwitter: false,
   guest: loginUser ? JSON.parse(loginUser).create_by == "guest" : false,
   user: loginUser ? JSON.parse(loginUser) : undefined,
   token: localStorage.getItem(KEY_TOKEN) || "",
@@ -35,6 +37,7 @@ const initialState: State = {
 
 const emptyState: State = {
   initialized: true,
+  authTwitter: false,
   guest: false,
   user: undefined,
   token: "",
@@ -94,6 +97,9 @@ const authDataSlice = createSlice({
     updateInitialized(state, action: PayloadAction<boolean>) {
       state.initialized = action.payload;
     },
+    updateAuthTwitter(state,action:PayloadAction<boolean>){
+      state.authTwitter = action.payload;
+    },
     updateToken(state, action: PayloadAction<RenewTokenResponse>) {
       const { token, refresh_token, expired_in } = action.payload;
       state.token = token;
@@ -129,6 +135,7 @@ const authDataSlice = createSlice({
 
 export const {
   updateInitialized,
+  updateAuthTwitter,
   updateLoginUser,
   setAuthData,
   resetAuthData,

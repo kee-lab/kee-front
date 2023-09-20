@@ -10,7 +10,7 @@ import {
 } from "@/types/auth";
 import { UserRegDTO, UserRegResponse } from "@/types/user";
 import BASE_URL, { KEY_DEVICE_ID, KEY_DEVICE_TOKEN, KEY_LOCAL_MAGIC_TOKEN } from "../config";
-import { resetAuthData, setAuthData, updateInitialized, updateToken } from "../slices/auth.data";
+import { resetAuthData, setAuthData, updateAuthTwitter, updateInitialized, updateToken } from "../slices/auth.data";
 import baseQuery from "./base.query";
 
 const getDeviceId = () => {
@@ -204,6 +204,18 @@ export const authApi = createApi({
         }
       }
     }),
+    getAuthByTwitter: builder.query<boolean, void>({
+      query: () => ({ url: "/user/authByTwitter", timeout: 5000 }),
+      async onQueryStarted(params, { dispatch, queryFulfilled }) {
+        try {
+          const { data: authTwitter } = await queryFulfilled;
+          dispatch(updateAuthTwitter(authTwitter));
+        } catch(e) {
+          console.error("api authTwitter error",e);
+          dispatch(updateAuthTwitter(true));
+        }
+      }
+    }),
     deleteCurrentAccount: builder.query<void, void>({
       query: () => ({
         url: `/user/delete`,
@@ -219,6 +231,7 @@ export const {
   useLazyCheckEmailQuery,
   useLazyGetInitializedQuery,
   useGetInitializedQuery,
+  useGetAuthByTwitterQuery,
   useSendLoginMagicLinkMutation,
   useSendRegMagicLinkMutation,
   useGetCredentialsQuery,

@@ -8,6 +8,7 @@ import useDeviceToken from "@/components/Notification/useDeviceToken";
 import RequireAuth from "@/components/RequireAuth";
 import RequireNoAuth from "@/components/RequireNoAuth";
 import RequireSingleTab from "@/components/RequireSingleTab";
+import RequireNoTwitterAuth from "@/components/RequireNoTiwtterAuth";
 import { compareVersion } from "@/utils";
 import { vapidKey } from "../app/config";
 import store, { useAppSelector } from "../app/store";
@@ -35,6 +36,7 @@ const FilesPage = lazy(() => import("./files"));
 const GuestLogin = lazy(() => import("./guest"));
 const ChatPage = lazy(() => import("./chat"));
 const HomePage = lazy(() => import("./friend/home"));
+const AuthTwitter = lazy(()=>import("./authTwitter/index"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -61,6 +63,14 @@ const PageRoutes = () => {
           element={
             <LazyIt>
               <GuestLogin />
+            </LazyIt>
+          }
+        />
+        <Route
+          path="/onAuthTwitter"
+          element={
+            <LazyIt>
+              <AuthTwitter />
             </LazyIt>
           }
         />
@@ -175,7 +185,9 @@ const PageRoutes = () => {
               <RequireAuth guestMode={guestMode}>
                 {/* 只允许活跃一个tab标签 */}
                 <RequireSingleTab>
-                  <HomePage />
+                  <RequireNoTwitterAuth>
+                    <HomePage />
+                  </RequireNoTwitterAuth>
                 </RequireSingleTab>
               </RequireAuth>
             </LazyIt>
