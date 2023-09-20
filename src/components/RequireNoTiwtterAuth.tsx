@@ -13,7 +13,7 @@ interface Props {
 }
 
 const RequireNoTwitterAuth: FC<Props> = ({ children, redirectTo = "/twitterAuth" }) => {
-  //查询用户状态
+  //查询用户状态，是否授权过twitter。
   const { isLoading } = useGetInitializedQuery();
   const { token, initialized, guest } = useAppSelector((store) => store.authData, shallowEqual);
   if (isLoading) return null;
