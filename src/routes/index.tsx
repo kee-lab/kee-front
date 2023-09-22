@@ -185,9 +185,9 @@ const PageRoutes = () => {
               <RequireAuth guestMode={guestMode}>
                 {/* 只允许活跃一个tab标签 */}
                 <RequireSingleTab>
-                  <RequireNoTwitterAuth>
+                  {/* <RequireNoTwitterAuth> */}
                     <HomePage />
-                  </RequireNoTwitterAuth>
+                  {/* </RequireNoTwitterAuth> */}
                 </RequireSingleTab>
               </RequireAuth>
             </LazyIt>
