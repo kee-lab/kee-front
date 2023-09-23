@@ -36,7 +36,7 @@ const FilesPage = lazy(() => import("./files"));
 const GuestLogin = lazy(() => import("./guest"));
 const ChatPage = lazy(() => import("./chat"));
 const HomePage = lazy(() => import("./friend/home"));
-const AuthTwitter = lazy(()=>import("./authTwitter/index"));
+const AuthTwitterPage = lazy(()=>import("./authTwitter"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -70,7 +70,7 @@ const PageRoutes = () => {
           path="/onAuthTwitter"
           element={
             <LazyIt>
-              <AuthTwitter />
+              <AuthTwitterPage />
             </LazyIt>
           }
         />
@@ -185,9 +185,9 @@ const PageRoutes = () => {
               <RequireAuth guestMode={guestMode}>
                 {/* 只允许活跃一个tab标签 */}
                 <RequireSingleTab>
-                  {/* <RequireNoTwitterAuth> */}
+                  <RequireNoTwitterAuth>
                     <HomePage />
-                  {/* </RequireNoTwitterAuth> */}
+                  </RequireNoTwitterAuth>
                 </RequireSingleTab>
               </RequireAuth>
             </LazyIt>
