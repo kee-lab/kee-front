@@ -60,6 +60,38 @@ export const authApi = createApi({
         }
       }
     }),
+    twitterCodeAuth: builder.mutation<AuthData, string>({
+      query: (code) => ({
+        url: "token/twitterAuth",
+        method: "POST",
+        body: {
+          "code":code,
+        }
+      }),
+      transformResponse: (data: AuthData) => {
+        const { avatar_updated_at } = data.user;
+        return {
+          ...data,
+          avatar:
+            avatar_updated_at == 0
+              ? ""
+              : `${BASE_URL}/resource/avatar?uid=${data.user.uid}&t=${avatar_updated_at}`
+        };
+      },
+      async onQueryStarted(params, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data) {
+            dispatch(setAuthData(data));
+          }
+          // 从localstorage 去掉 magic token
+          localStorage.removeItem(KEY_LOCAL_MAGIC_TOKEN);
+        } catch {
+          console.log("login error");
+        }
+      }
+    }),
+    
     guestLogin: builder.query<AuthData, void>({
       query: () => ({ url: "/token/login_guest" }),
       async onQueryStarted(param, { dispatch, queryFulfilled }) {
@@ -240,6 +272,7 @@ export const {
   useRenewMutation,
   useLazyGetMetamaskNonceQuery,
   useLoginMutation,
+  useTwitterCodeAuthMutation,
   useLazyLogoutQuery,
   useCheckMagicTokenValidMutation,
   useUpdatePasswordMutation,

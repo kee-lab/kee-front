@@ -37,6 +37,7 @@ const GuestLogin = lazy(() => import("./guest"));
 const ChatPage = lazy(() => import("./chat"));
 const HomePage = lazy(() => import("./friend/home"));
 const AuthTwitterPage = lazy(()=>import("./authTwitter"));
+const AuthTwitterCodePage = lazy(()=>import("./authTwitter/authTwitterCode"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -71,6 +72,14 @@ const PageRoutes = () => {
           element={
             <LazyIt>
               <AuthTwitterPage />
+            </LazyIt>
+          }
+        />
+        <Route
+          path="/authTwitterCode"
+          element={
+            <LazyIt>
+              <AuthTwitterCodePage />
             </LazyIt>
           }
         />
