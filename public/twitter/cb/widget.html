@@ -30,12 +30,12 @@
     </style>
   </head>
   <body>
-    <h1 class="tip">WebApp Twitter OAuth Callback Page</h1>
+    <h1 class="tip">Widget Twitter OAuth Callback Page</h1>
     <h1 class="error">Code not found</h1>
     <script>
       const code = new URLSearchParams(location.search).get("code");
       if (code) {
-        location.href = `${location.origin}/?code=${code}#/cb/github/webapp`;
+        location.href = `${location.origin}/?code=${code}#/cb/github/widget`;
       } else {
         document.body.classList.add("error");
       }

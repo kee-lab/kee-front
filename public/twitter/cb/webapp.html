@@ -35,7 +35,7 @@
     <script>
       const code = new URLSearchParams(location.search).get("code");
       if (code) {
-        location.href = `${location.origin}/?code=${code}#/cb/github/webapp`;
+        location.href = `${location.origin}/#/authTwitterCode?code=${code}`;
       } else {
         document.body.classList.add("error");
       }
