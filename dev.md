@@ -25,3 +25,9 @@ https://accounts.google.com/gsi/select?client_id=198904286187-crgk9ftklid07ichsl
 https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http%3A//127.0.0.1:3000/api/google/auth&client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com
 
 https://accounts.google.com/gsi/select?client_id=198904286187-crgk9ftklid07ichslicm0d6jopjg454.apps.googleusercontent.com&ux_mode=popup&ui_mode=card&as=MWmr5fy9%2FR9Ap09DxZBJAQ&channel_id=e145b07f329dfa029b0b67727687fe88909d31c42eac2dbb105083e478636a14&origin=http://127.0.0.1:3009/
+
+标准的
+https://twitter.com/i/oauth2/authorize?response_type=code&client_id=M1M5R3BMVy13QmpScXkzTUt5OE46MTpjaQ&redirect_uri=https://www.example.com&scope=tweet.read%20users.read%20offline.access&state=state&code_challenge=challenge&code_challenge_method=plain
+
+我使用的
+https://twitter.com/i/oauth2/authorize?response_type=code&client_id=VDJXUzBESDhhUDlyWjBDa0FtckE6MTpjaQ&redirect_uri=https://127.0.0.1/auth/&scope=tweet.read%20users.read%20follows.read%20follows.write&state=state&code_challenge=challenge&code_challenge_method=plain
