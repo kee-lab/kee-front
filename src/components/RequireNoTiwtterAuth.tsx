@@ -14,13 +14,12 @@ interface Props {
 
 const RequireNoTwitterAuth: FC<Props> = ({ children, redirectTo = "/twitterAuth" }) => {
   //查询用户状态，是否授权过twitter。
-  // const { isLoading } = useGetInitializedQuery();
-  const {data:authTwitter,isSuccess, isLoading} = useGetAuthByTwitterQuery();
-  const { token, initialized, guest } = useAppSelector((store) => store.authData, shallowEqual);
-  if (isLoading) return null;
+  // const {data:authTwitter,isSuccess, isLoading} = useGetAuthByTwitterQuery();
+  const { authTwitter, twitterUid } = useAppSelector((store) => store.authData, shallowEqual);
+  // if (isLoading) return null;
   //  未初始化 则先走setup 流程
-  if (isSuccess&&!authTwitter) return <Navigate to={`/onAuthTwitter`} replace />;
-  if (isSuccess&&authTwitter) return <Navigate to = {`/friend/main`} replace />;
+  if (!authTwitter) return <Navigate to={`/onAuthTwitter`} replace />;
+  if (authTwitter) return children;
 };
 
 export default RequireNoTwitterAuth;

@@ -90,7 +90,6 @@ export default function Register() {
       toast.error("Not Same Password!");
       return;
     }
-    debugger;
     const { data: canReg } = await checkEmail(email);
     if (canReg) {
       if (magic_token) {

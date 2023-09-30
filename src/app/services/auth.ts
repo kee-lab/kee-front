@@ -6,7 +6,8 @@ import {
   CredentialResponse,
   LoginCredential,
   RenewTokenDTO,
-  RenewTokenResponse
+  RenewTokenResponse,
+  TwitterUser
 } from "@/types/auth";
 import { UserRegDTO, UserRegResponse } from "@/types/user";
 import BASE_URL, { KEY_DEVICE_ID, KEY_DEVICE_TOKEN, KEY_LOCAL_MAGIC_TOKEN } from "../config";
@@ -60,38 +61,6 @@ export const authApi = createApi({
         }
       }
     }),
-    twitterCodeAuth: builder.mutation<AuthData, string>({
-      query: (code) => ({
-        url: "token/twitterAuth",
-        method: "POST",
-        body: {
-          "code":code,
-        }
-      }),
-      transformResponse: (data: AuthData) => {
-        const { avatar_updated_at } = data.user;
-        return {
-          ...data,
-          avatar:
-            avatar_updated_at == 0
-              ? ""
-              : `${BASE_URL}/resource/avatar?uid=${data.user.uid}&t=${avatar_updated_at}`
-        };
-      },
-      async onQueryStarted(params, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          if (data) {
-            dispatch(setAuthData(data));
-          }
-          // 从localstorage 去掉 magic token
-          localStorage.removeItem(KEY_LOCAL_MAGIC_TOKEN);
-        } catch {
-          console.log("login error");
-        }
-      }
-    }),
-    
     guestLogin: builder.query<AuthData, void>({
       query: () => ({ url: "/token/login_guest" }),
       async onQueryStarted(param, { dispatch, queryFulfilled }) {
@@ -236,15 +205,35 @@ export const authApi = createApi({
         }
       }
     }),
-    getAuthByTwitter: builder.query<boolean, void>({
-      query: () => ({ url: "/user/authByTwitter", timeout: 5000 }),
+    getAuthByTwitter: builder.query<number, void>({
+      query: () => ({ url: "/user/twitterUid"}),
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
-          const { data: authTwitter } = await queryFulfilled;
-          dispatch(updateAuthTwitter(authTwitter));
+          const { data: uid } = await queryFulfilled;
+          dispatch(updateAuthTwitter(uid));
         } catch(e) {
           console.error("api authTwitter error",e);
-          dispatch(updateAuthTwitter(true));
+          dispatch(updateAuthTwitter(0));
+        }
+      }
+    }),
+    twitterCodeAuth: builder.mutation<TwitterUser, string>({
+      query: (code) => ({
+        url: "token/twitterAuth",
+        method: "POST",
+        body: {
+          "code":code,
+        }
+      }),
+      async onQueryStarted(params, { dispatch, queryFulfilled }) {
+        try {
+          const { data: twitterUser } = await queryFulfilled;
+          if (twitterUser) {
+            dispatch(updateAuthTwitter(twitterUser.twitter_id));
+          }
+        } catch {
+          console.log("login error");
+          dispatch(updateAuthTwitter(0));
         }
       }
     }),

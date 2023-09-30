@@ -21,6 +21,7 @@ interface State {
   refreshToken: string;
   roleChanged: boolean;
   voice: boolean;
+  twitterUid: number|undefined;
 }
 const loginUser = localStorage.getItem(KEY_LOGIN_USER) || "";
 const initialState: State = {
@@ -32,7 +33,8 @@ const initialState: State = {
   expireTime: Number(localStorage.getItem(KEY_EXPIRE) || +new Date()),
   refreshToken: localStorage.getItem(KEY_REFRESH_TOKEN) || "",
   roleChanged: false,
-  voice: false
+  voice: false,
+  twitterUid:undefined
 };
 
 const emptyState: State = {
@@ -44,7 +46,8 @@ const emptyState: State = {
   expireTime: +new Date(),
   refreshToken: "",
   roleChanged: false,
-  voice: false
+  voice: false,
+  twitterUid:undefined,
 };
 
 const authDataSlice = createSlice({
@@ -97,8 +100,13 @@ const authDataSlice = createSlice({
     updateInitialized(state, action: PayloadAction<boolean>) {
       state.initialized = action.payload;
     },
-    updateAuthTwitter(state,action:PayloadAction<boolean>){
-      state.authTwitter = action.payload;
+    updateAuthTwitter(state,action:PayloadAction<number>){
+      state.twitterUid = action.payload;
+      if(action.payload!==0){
+        state.authTwitter = true;
+      }else{
+        state.authTwitter = false;
+      }
     },
     updateToken(state, action: PayloadAction<RenewTokenResponse>) {
       const { token, refresh_token, expired_in } = action.payload;

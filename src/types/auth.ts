@@ -16,6 +16,13 @@ export interface AuthData extends AuthToken {
   user: User;
 }
 
+export type TwitterUser = {
+  uid:number;
+  twitter_id:number;
+  username:string;
+  profile_image_url?:string;
+}
+
 export type PasswordCredential = {
   email: string;
   password: string;
