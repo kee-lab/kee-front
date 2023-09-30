@@ -16,12 +16,11 @@ const RequireNoTwitterAuth: FC<Props> = ({ children, redirectTo = "/twitterAuth"
   //查询用户状态，是否授权过twitter。
   // const { isLoading } = useGetInitializedQuery();
   const {data:authTwitter,isSuccess, isLoading} = useGetAuthByTwitterQuery();
-  // const { token, initialized, guest } = useAppSelector((store) => store.authData, shallowEqual);
-  // if (isLoading) return null;
+  const { token, initialized, guest } = useAppSelector((store) => store.authData, shallowEqual);
+  if (isLoading) return null;
   //  未初始化 则先走setup 流程
   if (isSuccess&&!authTwitter) return <Navigate to={`/onAuthTwitter`} replace />;
-  
-  // return token && !guest ? <Navigate to={`/onAuthTwitter`} replace /> : children;
+  if (isSuccess&&authTwitter) return <Navigate to = {`/friend/main`} replace />;
 };
 
 export default RequireNoTwitterAuth;

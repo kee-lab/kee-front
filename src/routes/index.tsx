@@ -38,6 +38,7 @@ const ChatPage = lazy(() => import("./chat"));
 const HomePage = lazy(() => import("./friend/home"));
 const AuthTwitterPage = lazy(()=>import("./authTwitter"));
 const AuthTwitterCodePage = lazy(()=>import("./authTwitter/authTwitterCode"));
+const MainPage = lazy(()=>import("./friend/main"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -45,7 +46,7 @@ const PageRoutes = () => {
   const version = useAppSelector((store) => store.server.version, shallowEqual);
   const online = useAppSelector((store) => store.ui.online, shallowEqual);
   // 提前获取device token
-  useDeviceToken(vapidKey);
+  // useDeviceToken(vapidKey);
   // 初始化元信息
   usePrefetchData();
   // 掉线检测
@@ -185,6 +186,13 @@ const PageRoutes = () => {
             </LazyIt>
           }
         />
+
+        <Route path="/friend/main" element={
+            <RequireAuth guestMode={guestMode}>
+              <MainPage />
+            </RequireAuth>
+        }>
+        </Route>
 
         <Route
           key={"main"}
