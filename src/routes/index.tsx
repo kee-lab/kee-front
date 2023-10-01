@@ -38,7 +38,7 @@ const ChatPage = lazy(() => import("./chat"));
 const HomePage = lazy(() => import("./friend/home"));
 const AuthTwitterPage = lazy(()=>import("./authTwitter"));
 const AuthTwitterCodePage = lazy(()=>import("./authTwitter/authTwitterCode"));
-const MainPage = lazy(()=>import("./friend/main"));
+const MyWalletPage = lazy(()=>import("./wallet"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -60,6 +60,15 @@ const PageRoutes = () => {
   return (
     <HashRouter>
       <Routes>
+        <Route path="/myWallet"
+        element={
+          <LazyIt>
+            <MyWalletPage/>
+          </LazyIt>
+        }
+        >
+
+        </Route>
         <Route
           path="/guest_login"
           element={
@@ -187,12 +196,6 @@ const PageRoutes = () => {
           }
         />
 
-        <Route path="/friend/main" element={
-            <RequireAuth guestMode={guestMode}>
-              <MainPage />
-            </RequireAuth>
-        }>
-        </Route>
 
         <Route
           key={"main"}

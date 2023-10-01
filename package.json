@@ -78,7 +78,8 @@
     "workbox-precaching": "^7.0.0",
     "workbox-routing": "^7.0.0",
     "workbox-strategies": "^7.0.0",
-    "workbox-webpack-plugin": "^7.0.0"
+    "workbox-webpack-plugin": "^7.0.0",
+    "ethers":"^6.7.1"
   },
   "scripts": {
     "start": "REACT_APP_BUILD_TIME=$(date +%s) node scripts/start.js",
