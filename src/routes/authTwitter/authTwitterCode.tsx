@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { NavLink, useLocation,useParams  } from "react-router-dom";
 import TwitterCallback from "@/routes/callback/TwitterCallback";
 
 
-//接收twitter的code.
+//接收twitter的code.多余页面.可以去掉.
 
 interface Props {
 }

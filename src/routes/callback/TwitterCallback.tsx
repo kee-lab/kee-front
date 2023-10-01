@@ -6,6 +6,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { KEY_LOCAL_MAGIC_TOKEN } from "@/app/config";
 import { useTwitterCodeAuthMutation } from "@/app/services/auth";
 import StyledButton from "../../components/styled/Button";
+import { useNavigate } from "react-router-dom";
 
 export type GithubLoginSource = "widget" | "webapp";
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 const TwitterCallback: FC<Props> = ({ code}) => {
   const { t } = useTranslation("auth");
   const { t: ct } = useTranslation();
+  const navigateTo = useNavigate();
   //拿本地存的magic token
   const [twitterCodeAuth, { isLoading, isSuccess, error }] = useTwitterCodeAuthMutation();
   useEffect(() => {
@@ -24,7 +26,8 @@ const TwitterCallback: FC<Props> = ({ code}) => {
     }
   }, [code]);
   const handleClose = () => {
-    window.close();
+    // window.close();
+    navigateTo("/");
   };
   if (error) return <span className="text-red-500 text-lg">Something Error</span>;
   return (
