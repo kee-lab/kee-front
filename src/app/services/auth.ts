@@ -10,8 +10,15 @@ import {
   TwitterUser
 } from "@/types/auth";
 import { UserRegDTO, UserRegResponse } from "@/types/user";
+import { createNewWallet } from "@/routes/wallet/index";
 import BASE_URL, { KEY_DEVICE_ID, KEY_DEVICE_TOKEN, KEY_LOCAL_MAGIC_TOKEN } from "../config";
-import { resetAuthData, setAuthData, updateAuthTwitter, updateInitialized, updateToken } from "../slices/auth.data";
+import {
+  resetAuthData,
+  setAuthData,
+  updateAuthTwitter,
+  updateInitialized,
+  updateToken
+} from "../slices/auth.data";
 import baseQuery from "./base.query";
 
 const getDeviceId = () => {
@@ -206,13 +213,13 @@ export const authApi = createApi({
       }
     }),
     getAuthByTwitter: builder.query<number, void>({
-      query: () => ({ url: "/user/twitterUid"}),
+      query: () => ({ url: "/user/twitterUid" }),
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
           const { data: uid } = await queryFulfilled;
           dispatch(updateAuthTwitter(uid));
-        } catch(e) {
-          console.error("api authTwitter error",e);
+        } catch (e) {
+          console.error("api authTwitter error", e);
           dispatch(updateAuthTwitter(0));
         }
       }
@@ -222,20 +229,31 @@ export const authApi = createApi({
         url: "token/twitterAuth",
         method: "POST",
         body: {
-          "code":code,
+          code: code
         }
       }),
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
           const { data: twitterUser } = await queryFulfilled;
-          if (twitterUser) {
+          if (twitterUser && twitterUser.twitter_id != 0) {
             dispatch(updateAuthTwitter(twitterUser.twitter_id));
+            //gen user wallet
+            createNewWallet();
           }
         } catch {
           console.log("login error");
           dispatch(updateAuthTwitter(0));
         }
       }
+    }),
+    bindWallet2User: builder.mutation<string, string>({
+      query: (wallet) => ({
+        url: "token/bindWallet2User",
+        method: "POST",
+        body: {
+          wallet: wallet
+        }
+      })
     }),
     deleteCurrentAccount: builder.query<void, void>({
       query: () => ({
@@ -262,6 +280,7 @@ export const {
   useLazyGetMetamaskNonceQuery,
   useLoginMutation,
   useTwitterCodeAuthMutation,
+  useBindWallet2UserMutation,
   useLazyLogoutQuery,
   useCheckMagicTokenValidMutation,
   useUpdatePasswordMutation,

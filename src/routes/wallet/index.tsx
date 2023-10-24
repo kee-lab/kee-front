@@ -2,23 +2,30 @@ import { FC } from "react";
 import { HDNodeWallet, Wallet, ethers } from "ethers";
 import { memo, useEffect } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
+import { useTwitterCodeAuthMutation, useBindWallet2UserMutation } from "@/app/services/auth";
 
 /**
  *
  * @returns 此文件应该修改为授权完twitter oath2后,直接自动生成用户钱包.
  */
+const [twitterCodeAuth, { isLoading, isSuccess, error }] = useTwitterCodeAuthMutation();
+const [bindWallet2User] = useBindWallet2UserMutation();
 
 //创建一个新的钱包账户
-const createNewWallet = () => {
-  const wallet = Wallet.createRandom();
-  console.log("private key:" + wallet.privateKey);
-  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, wallet.privateKey);
-  console.log("address key:" + wallet.address);
-  localStorage.setItem(KEY_WALLET_ADDRESS, wallet.address);
-  console.log("memo word:" + JSON.stringify(wallet.mnemonic));
-  let normalWallet: Wallet = new Wallet(wallet.privateKey);
+export const createNewWallet = () => {
+  const user_wallet = Wallet.createRandom();
+  console.log("private key:" + user_wallet.privateKey);
+  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, user_wallet.privateKey);
+  console.log("address key:" + user_wallet.address);
+  localStorage.setItem(KEY_WALLET_ADDRESS, user_wallet.address);
+  console.log("memo word:" + JSON.stringify(user_wallet.mnemonic));
+  let normalWallet: Wallet = new Wallet(user_wallet.privateKey);
+  // bind user wallet address to user_id
+  bindWallet2User(user_wallet.address).then((data) => {
+    console.log(data);
+  });
   connectJsonRpcUrl(normalWallet);
-  return wallet;
+  return user_wallet;
 };
 
 const NETWORK = "rinkeby";

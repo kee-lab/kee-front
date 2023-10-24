@@ -12,17 +12,15 @@ export type GithubLoginSource = "widget" | "webapp";
 type Props = {
   code: string;
 };
-const TwitterCallback: FC<Props> = ({ code}) => {
+const TwitterCallback: FC<Props> = ({ code }) => {
   const { t } = useTranslation("auth");
   const { t: ct } = useTranslation();
   const navigateTo = useNavigate();
-  //拿本地存的magic token
+  //根据code生成
   const [twitterCodeAuth, { isLoading, isSuccess, error }] = useTwitterCodeAuthMutation();
   useEffect(() => {
     if (code) {
-      twitterCodeAuth(
-        code
-      );
+      twitterCodeAuth(code);
     }
   }, [code]);
   const handleClose = () => {
@@ -31,7 +29,6 @@ const TwitterCallback: FC<Props> = ({ code}) => {
   };
   if (error) return <span className="text-red-500 text-lg">Something Error</span>;
   return (
-    
     <section className="flex-center flex-col gap-3">
       <StyledButton onClick={handleClose}>{ct("action.close")}</StyledButton>
       {isSuccess && <h1>{t("github_cb_tip")}</h1>}
