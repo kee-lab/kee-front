@@ -1,11 +1,7 @@
 import { FC, ReactElement } from "react";
 import { Navigate } from "react-router-dom";
 
-import {
-  useGetInitializedQuery,
-  useGetAuthByTwitterQuery,
-  useLazyGetAuthByTwitterQuery
-} from "@/app/services/auth";
+import { useGetInitializedQuery, useGetAuthByTwitterQuery } from "@/app/services/auth";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
 

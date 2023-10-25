@@ -86,7 +86,6 @@
     "build": "rm -rf build && REACT_APP_BUILD_TIME=$(date +%s) GENERATE_SOURCEMAP=false node scripts/build.js",
     "build:release": "rm -rf build && REACT_APP_BUILD_TIME=$(date +%s) REACT_APP_RELEASE=true GENERATE_SOURCEMAP=false node scripts/build.js",
     "deploy:demo": "REACT_APP_OFFICIAL_DEMO=true yarn build && gh-pages -d build",
-    "postinstall": "patch-package",
     "startwin": "node scripts/start.js"
   },
   "browserslist": {
@@ -134,7 +133,6 @@
     "patch-package": "^8.0.0",
     "postcss": "^8.4.29",
     "postcss-loader": "^7.3.3",
-    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.3.3"
   }
