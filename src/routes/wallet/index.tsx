@@ -21,11 +21,11 @@ export const createNewWallet = () => {
   console.log("memo word:" + JSON.stringify(user_wallet.mnemonic));
   let normalWallet: Wallet = new Wallet(user_wallet.privateKey);
   // bind user wallet address to user_id
-  bindWallet2User(user_wallet.address).then((data) => {
-    console.log(data);
-  });
-  connectJsonRpcUrl(normalWallet);
-  return user_wallet;
+  // bindWallet2User(user_wallet.address).then((data) => {
+  //   console.log(data);
+  // });
+  // connectJsonRpcUrl(normalWallet);
+  return normalWallet;
 };
 
 const NETWORK = "rinkeby";

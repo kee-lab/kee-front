@@ -237,8 +237,6 @@ export const authApi = createApi({
           const { data: twitterUser } = await queryFulfilled;
           if (twitterUser && twitterUser.twitter_id != 0) {
             dispatch(updateAuthTwitter(twitterUser.twitter_id));
-            //gen user wallet
-            createNewWallet();
           }
         } catch {
           console.log("login error");
@@ -251,7 +249,7 @@ export const authApi = createApi({
         url: "token/bindWallet2User",
         method: "POST",
         body: {
-          wallet: wallet
+          address: wallet
         }
       })
     }),
