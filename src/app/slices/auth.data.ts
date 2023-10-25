@@ -21,7 +21,7 @@ interface State {
   refreshToken: string;
   roleChanged: boolean;
   voice: boolean;
-  twitterUid: number|undefined;
+  twitterUid: number | undefined;
 }
 const loginUser = localStorage.getItem(KEY_LOGIN_USER) || "";
 const initialState: State = {
@@ -34,7 +34,7 @@ const initialState: State = {
   refreshToken: localStorage.getItem(KEY_REFRESH_TOKEN) || "",
   roleChanged: false,
   voice: false,
-  twitterUid:undefined
+  twitterUid: undefined
 };
 
 const emptyState: State = {
@@ -47,7 +47,7 @@ const emptyState: State = {
   refreshToken: "",
   roleChanged: false,
   voice: false,
-  twitterUid:undefined,
+  twitterUid: undefined
 };
 
 const authDataSlice = createSlice({
@@ -100,11 +100,11 @@ const authDataSlice = createSlice({
     updateInitialized(state, action: PayloadAction<boolean>) {
       state.initialized = action.payload;
     },
-    updateAuthTwitter(state,action:PayloadAction<number>){
+    updateAuthTwitter(state, action: PayloadAction<number>) {
       state.twitterUid = action.payload;
-      if(action.payload!==0){
+      if (action.payload !== 0) {
         state.authTwitter = true;
-      }else{
+      } else {
         state.authTwitter = false;
       }
     },

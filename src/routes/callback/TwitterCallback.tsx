@@ -42,7 +42,6 @@ const TwitterCallback: FC<Props> = ({ code }) => {
   }, [code]);
   useEffect(() => {
     if (isSuccess) {
-      alert("isSuccess!");
       let address = createNewWallet();
       setWallet(address);
     }

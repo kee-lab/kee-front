@@ -1,7 +1,11 @@
 import { FC, ReactElement } from "react";
 import { Navigate } from "react-router-dom";
 
-import { useGetInitializedQuery,useGetAuthByTwitterQuery } from "@/app/services/auth";
+import {
+  useGetInitializedQuery,
+  useGetAuthByTwitterQuery,
+  useLazyGetAuthByTwitterQuery
+} from "@/app/services/auth";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
 
@@ -14,9 +18,15 @@ interface Props {
 
 const RequireNoTwitterAuth: FC<Props> = ({ children, redirectTo = "/twitterAuth" }) => {
   //查询用户状态，是否授权过twitter。
-  // const {data:authTwitter,isSuccess, isLoading} = useGetAuthByTwitterQuery();
-  const { authTwitter, twitterUid } = useAppSelector((store) => store.authData, shallowEqual);
-  // if (isLoading) return null;
+  const { data: twitterId } = useGetAuthByTwitterQuery();
+  console.log("query-----------------");
+  console.log(twitterId?.toString());
+  let authTwitter = false;
+  if (twitterId !== 0) {
+    authTwitter = true;
+  }
+  // const { authTwitter, twitterUid } = useAppSelector((store) => store.authData, shallowEqual);
+  if (authTwitter) return null;
   //  未初始化 则先走setup 流程
   if (!authTwitter) return <Navigate to={`/onAuthTwitter`} replace />;
   if (authTwitter) return children;

@@ -3,7 +3,7 @@ import { HDNodeWallet, Wallet, ethers } from "ethers";
 import { memo, useEffect } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
 import { useTwitterCodeAuthMutation, useBindWallet2UserMutation } from "@/app/services/auth";
-
+// 暂时无人使用,可以删除.
 /**
  *
  * @returns 此文件应该修改为授权完twitter oath2后,直接自动生成用户钱包.
