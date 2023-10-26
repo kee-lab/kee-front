@@ -224,6 +224,9 @@ export const authApi = createApi({
         }
       }
     }),
+    checkWalletExist: builder.query<boolean, void>({
+      query: () => ({ url: "/user/checkWalletExist" })
+    }),
     twitterCodeAuth: builder.mutation<TwitterUser, string>({
       query: (code) => ({
         url: "token/twitterAuth",
@@ -266,6 +269,7 @@ export const {
   useLazyGuestLoginQuery,
   useGuestLoginQuery,
   useLazyCheckEmailQuery,
+  useLazyCheckWalletExistQuery,
   useLazyGetInitializedQuery,
   useGetInitializedQuery,
   useGetAuthByTwitterQuery,
