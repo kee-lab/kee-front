@@ -7,6 +7,7 @@ import { NavLink, Outlet, useLocation, useMatch } from "react-router-dom";
 import { useSetState } from "rooks";
 
 function HomePage() {
+  console.log("in home page!!!");
   // preload basic data
   // const { success } = usePreload();
 

@@ -18,13 +18,16 @@ const RequireNoTwitterAuth: FC<Props> = ({ children, redirectTo = "/twitterAuth"
   console.log("query-----------------");
   console.log(twitterId?.toString());
   let authTwitter = false;
-  if (twitterId !== 0) {
+  if (twitterId !== "0") {
     authTwitter = true;
   }
+  console.log("authTwitter is:" + authTwitter);
   // const { authTwitter, twitterUid } = useAppSelector((store) => store.authData, shallowEqual);
-  if (authTwitter) return null;
+  // if (authTwitter) return null;
   //  未初始化 则先走setup 流程
+  console.log("to onAuthTwitter");
   if (!authTwitter) return <Navigate to={`/onAuthTwitter`} replace />;
+  console.log("to home page!");
   if (authTwitter) return children;
 };
 

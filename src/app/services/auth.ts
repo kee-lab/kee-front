@@ -212,7 +212,7 @@ export const authApi = createApi({
         }
       }
     }),
-    getAuthByTwitter: builder.query<number, void>({
+    getAuthByTwitter: builder.query<string, void>({
       query: () => ({ url: "/user/twitterUid" }),
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
@@ -220,7 +220,7 @@ export const authApi = createApi({
           dispatch(updateAuthTwitter(uid));
         } catch (e) {
           console.error("api authTwitter error", e);
-          dispatch(updateAuthTwitter(0));
+          dispatch(updateAuthTwitter("0"));
         }
       }
     }),
@@ -235,12 +235,12 @@ export const authApi = createApi({
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
           const { data: twitterUser } = await queryFulfilled;
-          if (twitterUser && twitterUser.twitter_id != 0) {
+          if (twitterUser && twitterUser.twitter_id != "0") {
             dispatch(updateAuthTwitter(twitterUser.twitter_id));
           }
         } catch {
           console.log("login error");
-          dispatch(updateAuthTwitter(0));
+          dispatch(updateAuthTwitter("0"));
         }
       }
     }),

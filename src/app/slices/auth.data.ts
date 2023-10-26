@@ -21,7 +21,7 @@ interface State {
   refreshToken: string;
   roleChanged: boolean;
   voice: boolean;
-  twitterUid: number | undefined;
+  twitterUid: string | undefined;
 }
 const loginUser = localStorage.getItem(KEY_LOGIN_USER) || "";
 const initialState: State = {
@@ -100,9 +100,9 @@ const authDataSlice = createSlice({
     updateInitialized(state, action: PayloadAction<boolean>) {
       state.initialized = action.payload;
     },
-    updateAuthTwitter(state, action: PayloadAction<number>) {
+    updateAuthTwitter(state, action: PayloadAction<string>) {
       state.twitterUid = action.payload;
-      if (action.payload !== 0) {
+      if (action.payload !== "0") {
         state.authTwitter = true;
       } else {
         state.authTwitter = false;

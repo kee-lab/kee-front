@@ -17,11 +17,11 @@ export interface AuthData extends AuthToken {
 }
 
 export type TwitterUser = {
-  uid:number;
-  twitter_id:number;
-  username:string;
-  profile_image_url?:string;
-}
+  uid: number;
+  twitter_id: string;
+  username: string;
+  profile_image_url?: string;
+};
 
 export type PasswordCredential = {
   email: string;
