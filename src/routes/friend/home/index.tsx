@@ -20,6 +20,7 @@ function HomePage() {
   // }
 
   const createNewWallet = () => {
+    alert("createNewWallet!");
     const user_wallet = Wallet.createRandom();
     console.log("private key:" + user_wallet.privateKey);
     localStorage.setItem(KEY_WALLET_PRIVATE_KEY, user_wallet.privateKey);
@@ -44,14 +45,15 @@ function HomePage() {
   const [checkWalletExist, { isLoading }] = useLazyCheckWalletExistQuery();
   const [bindWallet2User] = useBindWallet2UserMutation();
   useEffect(() => {
-    checkWalletExist().then((isWalletExist) => {
-      if (!isWalletExist) {
+    checkWalletExist(localStorage.getItem(KEY_WALLET_ADDRESS) || "").then((isWalletExist) => {
+      alert("isWalletExist is:" + isWalletExist.data);
+      if (!isWalletExist.data) {
         let wallet = createNewWallet();
         // setWallet(address);
         bindWallet2User(wallet.address);
       }
     });
-  });
+  }, []);
 
   return (
     <div className="flex-center h-screen dark:bg-gray-700">

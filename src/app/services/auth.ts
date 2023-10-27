@@ -224,8 +224,10 @@ export const authApi = createApi({
         }
       }
     }),
-    checkWalletExist: builder.query<boolean, void>({
-      query: () => ({ url: "/user/checkWalletExist" })
+    checkWalletExist: builder.query<boolean, string>({
+      query: (wallet_address) => ({
+        url: `/user/checkWalletExist?wallet_address=${encodeURIComponent(wallet_address)}`
+      })
     }),
     twitterCodeAuth: builder.mutation<TwitterUser, string>({
       query: (code) => ({
