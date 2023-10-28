@@ -35,10 +35,11 @@ const ResourceManagement = lazy(() => import("./resources"));
 const FilesPage = lazy(() => import("./files"));
 const GuestLogin = lazy(() => import("./guest"));
 const ChatPage = lazy(() => import("./chat"));
-const HomePage = lazy(() => import("./friend/home"));
-const AuthTwitterPage = lazy(()=>import("./authTwitter"));
-const AuthTwitterCodePage = lazy(()=>import("./authTwitter/authTwitterCode"));
-const MyWalletPage = lazy(()=>import("./wallet"));
+const FriendHomePage = lazy(() => import("./friend/home"));
+const HomePage = lazy(() => import("./home/index"));
+const AuthTwitterPage = lazy(() => import("./authTwitter"));
+const AuthTwitterCodePage = lazy(() => import("./authTwitter/authTwitterCode"));
+const MyWalletPage = lazy(() => import("./wallet"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -60,15 +61,14 @@ const PageRoutes = () => {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/myWallet"
-        element={
-          <LazyIt>
-            <MyWalletPage/>
-          </LazyIt>
-        }
-        >
-
-        </Route>
+        <Route
+          path="/myWallet"
+          element={
+            <LazyIt>
+              <MyWalletPage />
+            </LazyIt>
+          }
+        ></Route>
         <Route
           path="/guest_login"
           element={
@@ -196,6 +196,15 @@ const PageRoutes = () => {
           }
         />
 
+        <Route
+          path="/home"
+          element={
+            <LazyIt>
+              {/* 只允许活跃一个tab标签 */}
+              <HomePage />
+            </LazyIt>
+          }
+        ></Route>
 
         <Route
           key={"main"}
@@ -206,7 +215,7 @@ const PageRoutes = () => {
                 {/* 只允许活跃一个tab标签 */}
                 <RequireSingleTab>
                   <RequireNoTwitterAuth>
-                    <HomePage />
+                    <FriendHomePage />
                   </RequireNoTwitterAuth>
                 </RequireSingleTab>
               </RequireAuth>

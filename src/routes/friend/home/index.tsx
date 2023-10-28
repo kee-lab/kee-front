@@ -8,9 +8,14 @@ import { useSetState } from "rooks";
 import { HDNodeWallet, Wallet, ethers } from "ethers";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
 import { useBindWallet2UserMutation, useLazyCheckWalletExistQuery } from "@/app/services/auth";
+import StreamStatus from "@/components/StreamStatus";
+import MobileNavs from "./MobileNavs";
+import { useAppSelector } from "@/app/store";
+import { shallowEqual } from "react-redux";
 
 function HomePage() {
   console.log("in home page!!!");
+  const guest = useAppSelector((store) => store.authData.guest, shallowEqual);
   // preload basic data
   // const { success } = usePreload();
 
@@ -56,31 +61,37 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="flex-center h-screen dark:bg-gray-700">
-      <div className="relative py-8 px-10 shadow-md rounded-xl">
-        <div className="flex-center flex-col pb-6">
-          <h2 className="font-semibold text-2xl text-gray-800 dark:text-white">friend.io</h2>
-        </div>
-        <div className="flex-center flex-col pb-6">
-          <div className="font-semibold text-2xl text-gray-800 dark:text-white">
-            the marketplace for your friend
+    <>
+      <StreamStatus />
+      <div
+        className={`vocechat-container flex w-screen h-screen bg-neutral-100 dark:bg-neutral-900`}
+      >
+        <div className="relative py-8 px-10 shadow-md rounded-xl">
+          <div className="flex-center flex-col pb-6">
+            <h2 className="font-semibold text-2xl text-gray-800 dark:text-white">friend.io</h2>
           </div>
-        </div>
-        <div className="flex-center flex-col pb-6">
-          <NavLink className="bg-primary-400 md:hover:bg-primary-400" to={"/register"}>
-            sign in
-          </NavLink>
-        </div>
-        <div className="flex-center flex-col pb-6">
-          <div className="danger" onClick={userLogout}>
-            logout
+          <div className="flex-center flex-col pb-6">
+            <div className="font-semibold text-2xl text-gray-800 dark:text-white">
+              the marketplace for your friend
+            </div>
           </div>
-          <div className="danger">
-            {logoutConfirm && <LogoutConfirmModal closeModal={toggleLogoutConfirm} />}
+          <div className="flex-center flex-col pb-6">
+            <NavLink className="bg-primary-400 md:hover:bg-primary-400" to={"/register"}>
+              sign in
+            </NavLink>
+          </div>
+          <div className="flex-center flex-col pb-6">
+            <div className="danger" onClick={userLogout}>
+              logout
+            </div>
+            <div className="danger">
+              {logoutConfirm && <LogoutConfirmModal closeModal={toggleLogoutConfirm} />}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {!guest && <MobileNavs />}
+    </>
   );
 }
 export default memo(HomePage);

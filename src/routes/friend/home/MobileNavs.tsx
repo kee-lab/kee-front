@@ -5,8 +5,8 @@ import clsx from "clsx";
 import ChatIcon from "@/assets/icons/chat.svg";
 import SettingIcon from "@/assets/icons/setting.svg";
 import UserIcon from "@/assets/icons/user.svg";
-import { useAppSelector } from "../../app/store";
 import { shallowEqual } from "react-redux";
+import { useAppSelector } from "@/app/store";
 
 // type Props = {}
 
@@ -30,6 +30,7 @@ const MobileNavs = () => {
   // 有点绕
   const chatNav = isChatHomePath ? "/chat" : chatPath || "/chat";
   const userNav = userPath || "/users";
+  const newPost = "/newPost";
   return (
     <ul
       className={clsx(
@@ -60,6 +61,20 @@ const MobileNavs = () => {
                 <UserIcon className={!active ? "fill-gray-500" : "fill-primary-500"} />
                 <span className={clsx("text-xs", !active ? "text-gray-500" : "text-primary-500")}>
                   Contacts
+                </span>
+              </div>
+            );
+          }}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className={() => `${linkClass}`} to={newPost}>
+          {({ isActive: active }) => {
+            return (
+              <div className="flex flex-col gap-1 items-center">
+                <UserIcon className={!active ? "fill-gray-500" : "fill-primary-500"} />
+                <span className={clsx("text-xs", !active ? "text-gray-500" : "text-primary-500")}>
+                  Explore
                 </span>
               </div>
             );
