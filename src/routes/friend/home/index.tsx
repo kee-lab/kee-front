@@ -12,6 +12,7 @@ import StreamStatus from "@/components/StreamStatus";
 import MobileNavs from "./MobileNavs";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
+import User from "./User";
 
 function HomePage() {
   console.log("in home page!!!");
@@ -37,6 +38,7 @@ function HomePage() {
   };
 
   const [logoutConfirm, setLogoutConfirm] = useState(false);
+  const loginUid = useAppSelector((store) => store.authData.user?.uid ?? 0, shallowEqual);
   const linkClass = `flex items-center gap-2.5 px-3 py-2 font-semibold text-sm text-gray-600 rounded-lg md:hover:bg-gray-800/10`;
   const toggleLogoutConfirm = () => {
     setLogoutConfirm(false);
@@ -66,28 +68,76 @@ function HomePage() {
       <div
         className={`vocechat-container flex w-screen h-screen bg-neutral-100 dark:bg-neutral-900`}
       >
-        <div className="relative py-8 px-10 shadow-md rounded-xl">
-          <div className="flex-center flex-col pb-6">
-            <h2 className="font-semibold text-2xl text-gray-800 dark:text-white">friend.io</h2>
+        {!guest && (
+          <div
+            className={`hidden md:flex h-full flex-col items-center relative w-16 transition-all`}
+          >
+            {loginUid && <User uid={loginUid} />}
+            <nav className="flex flex-col gap-1 px-3 py-6">
+              <NavLink
+                className={({ isActive }) =>
+                  `${linkClass} ${
+                    isActive || isChattingPage ? "bg-primary-400 md:hover:bg-primary-400" : ""
+                  }`
+                }
+                to={chatNav}
+              >
+                {({ isActive }) => {
+                  return (
+                    <Tooltip tip={t("chat")}>
+                      <ChatIcon className={isActive || isChattingPage ? "fill-white" : ""} />
+                    </Tooltip>
+                  );
+                }}
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  `${linkClass} ${isActive ? "bg-primary-400 md:hover:bg-primary-400" : ""}`
+                }
+                to={userNav}
+              >
+                {({ isActive }) => {
+                  return (
+                    <Tooltip tip={t("members")}>
+                      <UserIcon className={isActive ? "fill-white" : ""} />
+                    </Tooltip>
+                  );
+                }}
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  `${linkClass} ${isActive ? "bg-primary-400 md:hover:bg-primary-400" : ""}`
+                }
+                to={"/favs"}
+              >
+                {({ isActive }) => {
+                  return (
+                    <Tooltip tip={t("favs")}>
+                      <FavIcon className={isActive ? "fill-white" : ""} />
+                    </Tooltip>
+                  );
+                }}
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  `${linkClass} ${isActive ? "bg-primary-400 md:hover:bg-primary-400" : ""}`
+                }
+                to={"/files"}
+              >
+                {({ isActive }) => {
+                  return (
+                    <Tooltip tip={t("files")}>
+                      <FolderIcon className={isActive ? "fill-white" : ""} />
+                    </Tooltip>
+                  );
+                }}
+              </NavLink>
+            </nav>
+            <Menu />
           </div>
-          <div className="flex-center flex-col pb-6">
-            <div className="font-semibold text-2xl text-gray-800 dark:text-white">
-              the marketplace for your friend
-            </div>
-          </div>
-          <div className="flex-center flex-col pb-6">
-            <NavLink className="bg-primary-400 md:hover:bg-primary-400" to={"/register"}>
-              sign in
-            </NavLink>
-          </div>
-          <div className="flex-center flex-col pb-6">
-            <div className="danger" onClick={userLogout}>
-              logout
-            </div>
-            <div className="danger">
-              {logoutConfirm && <LogoutConfirmModal closeModal={toggleLogoutConfirm} />}
-            </div>
-          </div>
+        )}
+        <div className="h-full flex flex-col w-full">
+          <Outlet />
         </div>
       </div>
       {!guest && <MobileNavs />}
