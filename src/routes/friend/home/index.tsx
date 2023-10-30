@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Loading from "@/components/Loading";
 import Manifest from "@/components/Manifest";
 import usePreload from "@/hooks/usePreload";
@@ -13,6 +14,12 @@ import MobileNavs from "./MobileNavs";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
 import User from "./User";
+import Tooltip from "@/components/Tooltip";
+import ChatIcon from "@/assets/icons/chat.svg";
+import UserIcon from "@/assets/icons/user.svg";
+import FavIcon from "@/assets/icons/bookmark.svg";
+import FolderIcon from "@/assets/icons/folder.svg";
+import Menu from "./Menu";
 
 function HomePage() {
   console.log("in home page!!!");
@@ -40,6 +47,18 @@ function HomePage() {
   const [logoutConfirm, setLogoutConfirm] = useState(false);
   const loginUid = useAppSelector((store) => store.authData.user?.uid ?? 0, shallowEqual);
   const linkClass = `flex items-center gap-2.5 px-3 py-2 font-semibold text-sm text-gray-600 rounded-lg md:hover:bg-gray-800/10`;
+  const isHomePath = useMatch(`/`);
+  const { pathname } = useLocation();
+  const isChattingPage = isHomePath || pathname.startsWith("/chat");
+  const isChatHomePath = useMatch(`/chat`);
+  const { t } = useTranslation();
+  const { chat: chatPath, user: userPath } = useAppSelector(
+    (store) => store.ui.rememberedNavs,
+    shallowEqual
+  );
+  const userNav = userPath || "/users";
+  // 有点绕
+  const chatNav = isChatHomePath ? "/chat" : chatPath || "/chat";
   const toggleLogoutConfirm = () => {
     setLogoutConfirm(false);
   };

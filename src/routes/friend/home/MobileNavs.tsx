@@ -30,7 +30,7 @@ const MobileNavs = () => {
   // 有点绕
   const chatNav = isChatHomePath ? "/chat" : chatPath || "/chat";
   const userNav = userPath || "/users";
-  const newPost = "/newPost";
+  const newPost = "/explore/newPost";
   return (
     <ul
       className={clsx(
