@@ -7,6 +7,7 @@ import {
   ContactAction,
   ContactResponse,
   ContactStatus,
+  TwitterUserInfo,
   User,
   UserCreateDTO,
   UserDTO,
@@ -45,6 +46,27 @@ export const userApi = createApi({
           const {
             authData: { user: loginUser }
           } = getState() as RootState;
+          dispatch(
+            fillUsers(
+              users.map((u) => {
+                const status = loginUser?.uid == u.uid ? "added" : "";
+                return {
+                  ...u,
+                  status
+                };
+              })
+            )
+          );
+        } catch {
+          console.log("get user list error");
+        }
+      }
+    }),
+    getNewTwitterInfo: builder.query<TwitterUserInfo[], void>({
+      query: () => ({ url: `/user/newTwitterInfo` }),
+      async onQueryStarted(data, { dispatch, queryFulfilled, getState }) {
+        try {
+          const { data: twitterUsers } = await queryFulfilled;
           dispatch(
             fillUsers(
               users.map((u) => {

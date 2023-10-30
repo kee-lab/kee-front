@@ -78,3 +78,22 @@ export interface UserRegDTO
 export interface UserRegResponse extends AuthToken {
   user: User;
 }
+
+// pub struct TwitterUserInfo {
+//   pub uid: i64,
+//   pub username: String,
+//   pub twitter_id: String,
+//   pub profile_image_url: Option<String>,
+//   pub created_time: Option<DateTime>,
+//   pub updated_time: Option<DateTime>,
+// }
+
+// twitter user info
+export interface TwitterUserInfo {
+  uid: number;
+  username: string;
+  twitter_id: string;
+  profile_image_url?: string;
+  created_time?: Date;
+  updated_time?: Date;
+}
