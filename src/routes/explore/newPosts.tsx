@@ -6,7 +6,7 @@ function newPostPage() {
     getNewTwitterInfo,
     { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: twitterUsers }
   ] = useLazyGetNewTwitterInfoQuery();
-  return <>{getNewTwitterInfo && twitterUsers}</>;
+  return <>{usersSuccess && twitterUsers}</>;
 }
 
 export default newPostPage;
