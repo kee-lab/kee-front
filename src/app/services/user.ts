@@ -63,25 +63,7 @@ export const userApi = createApi({
       }
     }),
     getNewTwitterInfo: builder.query<TwitterUserInfo[], void>({
-      query: () => ({ url: `/user/newTwitterInfo` }),
-      async onQueryStarted(data, { dispatch, queryFulfilled, getState }) {
-        try {
-          const { data: twitterUsers } = await queryFulfilled;
-          dispatch(
-            fillUsers(
-              users.map((u) => {
-                const status = loginUser?.uid == u.uid ? "added" : "";
-                return {
-                  ...u,
-                  status
-                };
-              })
-            )
-          );
-        } catch {
-          console.log("get user list error");
-        }
-      }
+      query: () => ({ url: `/user/newTwitterInfo` })
     }),
     getContacts: builder.query<ContactResponse[], void>({
       query: () => ({ url: `/user/contacts` }),
@@ -269,6 +251,7 @@ export const userApi = createApi({
 
 export const {
   useLazyGetUsersQuery,
+  useLazyGetNewTwitterInfoQuery,
   useGetUserByAdminQuery,
   useUpdateAvatarByAdminMutation,
   useUpdateAutoDeleteMsgMutation,

@@ -1,10 +1,12 @@
+import { useLazyGetNewTwitterInfoQuery } from "@/app/services/user";
 import useFilteredUsers from "@/hooks/useFilteredUsers";
 
-import 
-
-
 function newPostPage() {
-  return <>bbb</>;
+  const [
+    getNewTwitterInfo,
+    { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: twitterUsers }
+  ] = useLazyGetNewTwitterInfoQuery();
+  return <>{getNewTwitterInfo && twitterUsers}</>;
 }
 
 export default newPostPage;
