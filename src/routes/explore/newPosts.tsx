@@ -1,7 +1,10 @@
 import { useLazyGetNewTwitterInfoQuery } from "@/app/services/user";
 import clsx from "clsx";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ViewportList } from "react-viewport-list";
+import GoBackNav from "@/components/GoBackNav";
+import { TwitterUserInfo } from "@/types/user";
+import Ui from "@/app/slices/ui";
 
 function newPostPage() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -9,6 +12,9 @@ function newPostPage() {
     getNewTwitterInfo,
     { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: twitterUsers }
   ] = useLazyGetNewTwitterInfoQuery();
+
+  useEffect(() => {});
+
   return (
     <div className={clsx("flex h-screen md:h-full md:pt-2 md:pb-2.5 md:pr-12")}>
       <div
@@ -17,18 +23,14 @@ function newPostPage() {
         )}
       >
         <div className="flex flex-col md:gap-1 px-2 pt-3 pb-20 md:py-3 overflow-scroll" ref={ref}>
-          <ViewportList viewportRef={ref} items={twitterUsers?.map(({ uid }) => uid)}>
-            {(uid) => {
+          <ViewportList viewportRef={ref} items={twitterUsers}>
+            {(twitterUser: TwitterUserInfo) => {
               return (
-                <NavLink
-                  key={uid}
-                  className={({ isActive }) =>
-                    `rounded-md md:hover:bg-gray-500/10 ${isActive ? "bg-gray-500/10" : ""}`
-                  }
-                  to={`/users/${uid}`}
-                >
-                  <User uid={uid} enableContextMenu={true} />
-                </NavLink>
+                <div>
+                  <ul>
+                    <li>twitterUser.username</li>
+                  </ul>
+                </div>
               );
             }}
           </ViewportList>
@@ -36,12 +38,9 @@ function newPostPage() {
       </div>
       <div
         className={clsx(
-          `md:rounded-r-2xl bg-white w-full flex justify-center items-start dark:bg-gray-700`,
-          !user_id && "h-full items-center",
-          !isUserDetail && "hidden md:flex"
+          `md:rounded-r-2xl bg-white w-full flex justify-center items-start dark:bg-gray-700`
         )}
       >
-        {isUserDetail ? <Profile uid={+user_id} /> : <BlankPlaceholder type="user" />}
         <GoBackNav />
       </div>
     </div>
