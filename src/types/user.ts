@@ -94,6 +94,7 @@ export interface TwitterUserInfo {
   username: string;
   twitter_id: string;
   profile_image_url?: string;
-  created_time?: Date;
-  updated_time?: Date;
+  created_time: Date;
+  updated_time: Date;
+  share_supply: number;
 }
