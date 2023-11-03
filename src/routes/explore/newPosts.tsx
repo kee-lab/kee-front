@@ -44,7 +44,7 @@ function newPostPage() {
                     {twitterUser.created_time.toLocaleString()}
                   </span>
                   <span className="font-bold text-sm text-gray-600 dark:text-white flex items-center gap-1">
-                    {twitterUser.share_supply}
+                    {twitterUser.price}
                   </span>
                 </div>
               </div>

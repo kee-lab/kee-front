@@ -97,4 +97,5 @@ export interface TwitterUserInfo {
   created_time: Date;
   updated_time: Date;
   share_supply: number;
+  price: number;
 }
