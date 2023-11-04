@@ -1,15 +1,6 @@
-import { FC } from "react";
-import { HDNodeWallet, Wallet, ethers } from "ethers";
-import { memo, useEffect } from "react";
+import { Wallet, ethers } from "ethers";
+import { memo } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
-import { useTwitterCodeAuthMutation, useBindWallet2UserMutation } from "@/app/services/auth";
-// 暂时无人使用,可以删除.
-/**
- *
- * @returns 此文件应该修改为授权完twitter oath2后,直接自动生成用户钱包.
- */
-const [twitterCodeAuth, { isLoading, isSuccess, error }] = useTwitterCodeAuthMutation();
-const [bindWallet2User] = useBindWallet2UserMutation();
 
 //创建一个新的钱包账户
 export const createNewWallet = () => {
@@ -20,37 +11,48 @@ export const createNewWallet = () => {
   localStorage.setItem(KEY_WALLET_ADDRESS, user_wallet.address);
   console.log("memo word:" + JSON.stringify(user_wallet.mnemonic));
   let normalWallet: Wallet = new Wallet(user_wallet.privateKey);
-  // bind user wallet address to user_id
-  // bindWallet2User(user_wallet.address).then((data) => {
-  //   console.log(data);
-  // });
-  // connectJsonRpcUrl(normalWallet);
   return normalWallet;
 };
 
-const NETWORK = "rinkeby";
-const API_KEY = "在infura中申请的key";
-const JSON_RPC_URL = "https://eth.llamarpc.com";
-
-const connectJsonRpcUrl = (wallet: Wallet) => {
-  const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
-  provider.getBalance(wallet).then((balance) => {
-    alert(balance);
-  });
-};
-
-//连接内置钱包账户
-const connectCustomWallet = (wallet: Wallet): Wallet => {
-  const provider = new ethers.InfuraProvider(NETWORK, API_KEY);
-  provider.getBalance(wallet);
-  const connectWallet = wallet.connect(provider);
-  return connectWallet;
-};
-
 function myWallet() {
+  const NETWORK = "arbitrum-sepolia";
+  //在infura中申请的key
+  const API_KEY = "53119e34e0294563ab8d294d8ea8adb9";
+  const JSON_RPC_URL = "https://arbitrum-sepolia.infura.io/v3/53119e34e0294563ab8d294d8ea8adb9";
+  const contractAddress = "0x838d8929f81b968f50f3ccf7e862521c8d9f34e6";
+
+  const getWallet = (): Wallet | null => {
+    const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+    let wallet = null;
+    if (privateKey) {
+      wallet = new Wallet(privateKey);
+    }
+    return wallet;
+  };
+
+  const connectJsonRpcUrl = async () => {
+    const wallet = getWallet();
+    const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
+    if (wallet) {
+      provider.getBalance(wallet).then((balance) => {
+        alert(balance);
+      });
+    } else {
+      alert("wallet not exist");
+    }
+  };
+
+  //连接内置钱包账户
+  const connectCustomWallet = (wallet: Wallet): Wallet => {
+    const provider = new ethers.InfuraProvider(NETWORK, API_KEY);
+    provider.getBalance(wallet);
+    const connectWallet = wallet.connect(provider);
+    return connectWallet;
+  };
+
   return (
     <>
-      <div onClick={createNewWallet}>my wallet</div>
+      <div onClick={connectJsonRpcUrl}>my wallet</div>
     </>
   );
 }
