@@ -55,6 +55,9 @@ function myWallet() {
     const abi = JSON.parse(fs.readFileSync("./abis/abi"));
     // 获取合约，参数：contractAddress、contractABI、signer
     const contract = new ethers.Contract(contractAddress, abi, signer);
+    const contractWithSigner = contract.connect(wallet);
+    let price = contractWithSigner.getPrice(19, 1);
+
     return contract;
   };
 
