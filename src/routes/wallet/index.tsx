@@ -1,6 +1,7 @@
-import { Wallet, ethers } from "ethers";
+import { InterfaceAbi, Wallet, ethers } from "ethers";
 import { memo } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
+const fs = require("fs");
 
 //创建一个新的钱包账户
 export const createNewWallet = () => {
@@ -22,6 +23,10 @@ function myWallet() {
   const contractAddress = "0x838d8929f81b968f50f3ccf7e862521c8d9f34e6";
 
   const getWallet = (): Wallet | null => {
+    // const provider = new ethers.getDefaultProvider('https://goerli.infura.io/v3/9df29b35c83d4e4c87a8cde2034794f1');
+    // const privateKey = fs.readFileSync(".secret").toString().trim();
+    // const wallet = new ethers.Wallet(privateKey, provider);
+
     const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
     let wallet = null;
     if (privateKey) {
@@ -40,6 +45,17 @@ function myWallet() {
     } else {
       alert("wallet not exist");
     }
+  };
+
+  // 获取合约
+  const getContract = async () => {
+    const wallet = getWallet();
+    const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
+    const signer = await provider.getSigner();
+    const abi = JSON.parse(fs.readFileSync("./abis/abi"));
+    // 获取合约，参数：contractAddress、contractABI、signer
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    return contract;
   };
 
   //连接内置钱包账户
