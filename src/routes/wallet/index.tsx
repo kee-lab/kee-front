@@ -1,7 +1,6 @@
 import { InterfaceAbi, Wallet, ethers } from "ethers";
 import { memo } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
-const fs = require("fs");
 
 //创建一个新的钱包账户
 export const createNewWallet = () => {
@@ -20,7 +19,7 @@ function myWallet() {
   //在infura中申请的key
   const API_KEY = "53119e34e0294563ab8d294d8ea8adb9";
   const JSON_RPC_URL = "https://arbitrum-sepolia.infura.io/v3/53119e34e0294563ab8d294d8ea8adb9";
-  const contractAddress = "0x838d8929f81b968f50f3ccf7e862521c8d9f34e6";
+  const contractAddress = "0x6c50E3C83d7710DE9a993dac8bBC990e459e3865";
 
   const getWallet = (): Wallet | null => {
     // const provider = new ethers.getDefaultProvider('https://goerli.infura.io/v3/9df29b35c83d4e4c87a8cde2034794f1');
@@ -30,7 +29,8 @@ function myWallet() {
     const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
     let wallet = null;
     if (privateKey) {
-      wallet = new Wallet(privateKey);
+      const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
+      wallet = new Wallet(privateKey, provider);
     }
     return wallet;
   };
@@ -50,14 +50,14 @@ function myWallet() {
   // 获取合约
   const getContract = async () => {
     const wallet = getWallet();
-    const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
-    const signer = await provider.getSigner();
-    const abi = JSON.parse(fs.readFileSync("./abis/abi"));
+    const abi = require("@/abis/abi.json");
     // 获取合约，参数：contractAddress、contractABI、signer
-    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const contract = new ethers.Contract(contractAddress, abi, wallet);
     const contractWithSigner = contract.connect(wallet);
-    let price = contractWithSigner.getPrice(19, 1);
 
+    let price = await contract.getPrice.staticCall(10, 1);
+
+    alert("price is:  " + price);
     return contract;
   };
 
@@ -71,7 +71,7 @@ function myWallet() {
 
   return (
     <>
-      <div onClick={connectJsonRpcUrl}>my wallet</div>
+      <div onClick={getContract}>my wallet</div>
     </>
   );
 }
