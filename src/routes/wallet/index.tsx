@@ -54,6 +54,7 @@ function myWallet() {
     // 获取合约，参数：contractAddress、contractABI、signer
     const contract = new ethers.Contract(contractAddress, abi, wallet);
     // 检查用户钱包地址是否存在.
+    const shareWallet = 
     // 得到用户的购买价格
     let buyPriceAfterFee = await contract.getBuyPriceAfterFee.staticCall(
       "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
