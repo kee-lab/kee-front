@@ -53,10 +53,14 @@ function myWallet() {
     const abi = require("@/abis/abi.json");
     // 获取合约，参数：contractAddress、contractABI、signer
     const contract = new ethers.Contract(contractAddress, abi, wallet);
-
-    let price = await contract.getPrice.staticCall(10, 1);
-
-    alert("price is:  " + price);
+    // 检查用户钱包地址是否存在.
+    // 得到用户的购买价格
+    let buyPriceAfterFee = await contract.getBuyPriceAfterFee.staticCall(
+      "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
+      1
+    );
+    // 去购买用户的share
+    alert("buyPriceAfterFee is:  " + buyPriceAfterFee);
     return contract;
   };
 
