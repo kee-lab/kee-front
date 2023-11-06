@@ -53,7 +53,6 @@ function myWallet() {
     const abi = require("@/abis/abi.json");
     // 获取合约，参数：contractAddress、contractABI、signer
     const contract = new ethers.Contract(contractAddress, abi, wallet);
-    const contractWithSigner = contract.connect(wallet);
 
     let price = await contract.getPrice.staticCall(10, 1);
 
