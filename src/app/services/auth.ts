@@ -213,7 +213,7 @@ export const authApi = createApi({
       }
     }),
     getAuthByTwitter: builder.query<string, void>({
-      query: () => ({ url: "/user/twitterUid" }),
+      query: () => ({ url: "/user/getTwitterIdSelf" }),
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
           const { data: uid } = await queryFulfilled;

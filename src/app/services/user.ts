@@ -63,7 +63,7 @@ export const userApi = createApi({
       }
     }),
     getNewTwitterInfo: builder.query<TwitterUserInfo[], void>({
-      query: () => ({ url: `/user/newTwitterInfo` })
+      query: () => ({ url: `/user/getTwitterListLast` })
     }),
     getContacts: builder.query<ContactResponse[], void>({
       query: () => ({ url: `/user/contacts` }),
