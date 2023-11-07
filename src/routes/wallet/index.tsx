@@ -1,6 +1,7 @@
 import { InterfaceAbi, Wallet, ethers } from "ethers";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
+import {useLazyGetWalletByUidQuery} from "@/app/services/user";
 
 //创建一个新的钱包账户
 export const createNewWallet = () => {
@@ -15,6 +16,16 @@ export const createNewWallet = () => {
 };
 
 function myWallet() {
+  const [
+    getWalletByUid,
+    { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: wallet }
+  ] = useLazyGetWalletByUidQuery();
+
+  useEffect(()=>{
+    
+    getWalletByUid(2);
+  },[]);
+
   const NETWORK = "arbitrum-sepolia";
   //在infura中申请的key
   const API_KEY = "53119e34e0294563ab8d294d8ea8adb9";
