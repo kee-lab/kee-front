@@ -1,4 +1,4 @@
-import { useLazyGetNewTwitterInfoQuery } from "@/app/services/user";
+import { useLazyGetTwitterListLastQuery } from "@/app/services/user";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import { ViewportList } from "react-viewport-list";
@@ -11,7 +11,7 @@ function newPostPage() {
   const [
     getNewTwitterInfo,
     { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: twitterUsers }
-  ] = useLazyGetNewTwitterInfoQuery();
+  ] = useLazyGetTwitterListLastQuery();
 
   useEffect(() => {
     getNewTwitterInfo();

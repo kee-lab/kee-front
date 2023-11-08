@@ -66,7 +66,7 @@ export const userApi = createApi({
       query: () => ({ url: `/user/getTwitterListLast` })
     }),
     getWalletByUid: builder.query<string, number>({
-      query: (uid) => ({ url: `/user/getWalletByUid` })
+      query: (uid) => ({ url: `/user/getWalletByUid/${uid}` })
     }),
     getContacts: builder.query<ContactResponse[], void>({
       query: () => ({ url: `/user/contacts` }),

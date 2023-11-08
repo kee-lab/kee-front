@@ -1,7 +1,17 @@
 import { InterfaceAbi, Wallet, ethers } from "ethers";
 import { memo, useEffect } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
-import {useLazyGetWalletByUidQuery} from "@/app/services/user";
+import { useLazyGetWalletByUidQuery } from "@/app/services/user";
+import { useAppSelector } from "@/app/store";
+import { shallowEqual } from "react-redux";
+
+const user1Address = "0x4ae7D5cb52bc60bc84776108A3112ed0c4473D36";
+
+const NETWORK = "arbitrum-sepolia";
+//在infura中申请的key
+const API_KEY = "53119e34e0294563ab8d294d8ea8adb9";
+const JSON_RPC_URL = "https://arbitrum-sepolia.infura.io/v3/53119e34e0294563ab8d294d8ea8adb9";
+const contractAddress = "0x6c50E3C83d7710DE9a993dac8bBC990e459e3865";
 
 //创建一个新的钱包账户
 export const createNewWallet = () => {
@@ -21,16 +31,15 @@ function myWallet() {
     { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: wallet }
   ] = useLazyGetWalletByUidQuery();
 
-  useEffect(()=>{
-    
-    getWalletByUid(2);
-  },[]);
+  const loginUser = useAppSelector((store) => store.authData.user, shallowEqual);
 
-  const NETWORK = "arbitrum-sepolia";
-  //在infura中申请的key
-  const API_KEY = "53119e34e0294563ab8d294d8ea8adb9";
-  const JSON_RPC_URL = "https://arbitrum-sepolia.infura.io/v3/53119e34e0294563ab8d294d8ea8adb9";
-  const contractAddress = "0x6c50E3C83d7710DE9a993dac8bBC990e459e3865";
+  // useEffect(() => {
+  //   const loginUser = useAppSelector((store) => store.authData.user, shallowEqual);
+  //   const uid = loginUser?.uid;
+  //   if(uid){
+  //     getWalletByUid(2);
+  //   }
+  // }, []);
 
   const getWallet = (): Wallet | null => {
     // const provider = new ethers.getDefaultProvider('https://goerli.infura.io/v3/9df29b35c83d4e4c87a8cde2034794f1');
@@ -65,14 +74,33 @@ function myWallet() {
     // 获取合约，参数：contractAddress、contractABI、signer
     const contract = new ethers.Contract(contractAddress, abi, wallet);
     // 检查用户钱包地址是否存在.
-    const shareWallet = 
-    // 得到用户的购买价格
-    let buyPriceAfterFee = await contract.getBuyPriceAfterFee.staticCall(
-      "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
-      1
-    );
-    // 去购买用户的share
-    alert("buyPriceAfterFee is:  " + buyPriceAfterFee);
+    const uid = loginUser?.uid;
+    if (uid) {
+      let shareWallet = await getWalletByUid(2);
+      console.log("shareWallet is" + JSON.stringify(shareWallet.data));
+      // console.log("shareWallet is:" + shareWallet);
+      if (shareWallet.data) {
+        // 得到用户的购买价格
+        let buyPriceAfterFee = await contract.getBuyPriceAfterFee.staticCall(
+          "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
+          1
+        );
+        // 去购买用户的share
+        console.log("buyPriceAfterFee is:  " + buyPriceAfterFee);
+        // const result = await contract.buyShares.staticCall(
+        //   "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
+        //   1
+        // );
+        const result = await contract.buyShares("0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E", 1);
+        console.log("result is:" + JSON.stringify(result));
+        let shareSupply = await contract.sharesSupply(
+          "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
+          { value: buyPriceAfterFee }
+        );
+        console.log("shareSupply is:%d", shareSupply);
+      }
+    }
+
     return contract;
   };
 
