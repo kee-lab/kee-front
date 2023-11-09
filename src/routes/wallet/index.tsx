@@ -81,23 +81,22 @@ function myWallet() {
       // console.log("shareWallet is:" + shareWallet);
       if (shareWallet.data) {
         // 得到用户的购买价格
-        let buyPriceAfterFee = await contract.getBuyPriceAfterFee.staticCall(
+        let buyPriceAfterFee = await contract.getBuyPriceAfterFee(
           "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
           1
         );
         // 去购买用户的share
         console.log("buyPriceAfterFee is:  " + buyPriceAfterFee);
+        let shareSupply = await contract.sharesSupply("0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E");
+        console.log("shareSupply is:%d", shareSupply);
         // const result = await contract.buyShares.staticCall(
         //   "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
         //   1
         // );
-        const result = await contract.buyShares("0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E", 1);
+        const result = await contract.buyShares("0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E", 1, {
+          value: buyPriceAfterFee
+        });
         console.log("result is:" + JSON.stringify(result));
-        let shareSupply = await contract.sharesSupply(
-          "0xeA398f3037b3F7EE32BC7E1FABBF66cf22Bb537E",
-          { value: buyPriceAfterFee }
-        );
-        console.log("shareSupply is:%d", shareSupply);
       }
     }
 
