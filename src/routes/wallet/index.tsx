@@ -1,11 +1,9 @@
-import { InterfaceAbi, Wallet, ethers } from "ethers";
+import { Contract, InterfaceAbi, Wallet, ethers } from "ethers";
 import { memo, useEffect } from "react";
 import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
-
-const user1Address = "0x4ae7D5cb52bc60bc84776108A3112ed0c4473D36";
 
 const NETWORK = "arbitrum-sepolia";
 //在infura中申请的key
@@ -25,6 +23,28 @@ export const createNewWallet = () => {
   return normalWallet;
 };
 
+const getWallet = (): Wallet | null => {
+  // const provider = new ethers.getDefaultProvider('https://goerli.infura.io/v3/9df29b35c83d4e4c87a8cde2034794f1');
+  // const privateKey = fs.readFileSync(".secret").toString().trim();
+  // const wallet = new ethers.Wallet(privateKey, provider);
+
+  const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+  let wallet = null;
+  if (privateKey) {
+    const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
+    wallet = new Wallet(privateKey, provider);
+  }
+  return wallet;
+};
+
+export const getContract = (): Contract => {
+  const wallet = getWallet();
+  const abi = require("@/abis/abi.json");
+  // 获取合约，参数：contractAddress、contractABI、signer
+  const contract = new ethers.Contract(contractAddress, abi, wallet);
+  return contract;
+};
+
 function myWallet() {
   const [
     getWalletByUid,
@@ -41,20 +61,6 @@ function myWallet() {
   //   }
   // }, []);
 
-  const getWallet = (): Wallet | null => {
-    // const provider = new ethers.getDefaultProvider('https://goerli.infura.io/v3/9df29b35c83d4e4c87a8cde2034794f1');
-    // const privateKey = fs.readFileSync(".secret").toString().trim();
-    // const wallet = new ethers.Wallet(privateKey, provider);
-
-    const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
-    let wallet = null;
-    if (privateKey) {
-      const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
-      wallet = new Wallet(privateKey, provider);
-    }
-    return wallet;
-  };
-
   const connectJsonRpcUrl = async () => {
     const wallet = getWallet();
     const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
@@ -68,11 +74,8 @@ function myWallet() {
   };
 
   // 获取合约
-  const getContract = async () => {
-    const wallet = getWallet();
-    const abi = require("@/abis/abi.json");
-    // 获取合约，参数：contractAddress、contractABI、signer
-    const contract = new ethers.Contract(contractAddress, abi, wallet);
+  const buyShare = async () => {
+    const contract = getContract();
     // 检查用户钱包地址是否存在.
     const uid = loginUser?.uid;
     if (uid) {
@@ -113,7 +116,7 @@ function myWallet() {
 
   return (
     <>
-      <div onClick={getContract}>my wallet</div>
+      <div onClick={buyShare}>my wallet</div>
     </>
   );
 }
