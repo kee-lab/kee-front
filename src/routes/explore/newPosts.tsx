@@ -7,6 +7,7 @@ import { TwitterUserInfo } from "@/types/user";
 import Ui from "@/app/slices/ui";
 import { getContract } from "../wallet";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
+import { convertToRelativeTime } from "@/utils";
 
 function newPostPage() {
   const ref = useRef<HTMLUListElement | null>(null);
@@ -57,23 +58,24 @@ function newPostPage() {
               onClick={buyShare.bind(null, twitterUser.uid)}
               className="w-full flex items-center justify-between px-3 py-2 rounded-md md:hover:bg-slate-50 md:dark:hover:bg-gray-800"
             >
-              <div className="flex gap-4">
-                <div className="flex flex-col">
-                  <span className="md:block text-xs text-gray-500 dark:text-slate-50">
-                    <img src={twitterUser.profile_image_url} alt="" />
-                  </span>
-                  <span className="font-bold text-sm text-gray-600 dark:text-white flex items-center gap-1">
+              <div className="flex gap-4 items-stretch">
+                <img
+                  className="overflow-hidden rounded-full h-12 w-12"
+                  src={twitterUser.profile_image_url}
+                  alt=""
+                />
+                <div className="flex flex-col justify-center">
+                  <span className="font-bold text-md text-gray-600 dark:text-white flex items-center gap-1">
                     {twitterUser.username}
                   </span>
-                  <span className="font-bold text-sm text-gray-600 dark:text-white flex items-center gap-1">
-                    {twitterUser.twitter_id}
-                  </span>
-                  <span className="font-bold text-sm text-gray-600 dark:text-white flex items-center gap-1">
-                    {twitterUser.created_time.toLocaleString()}
-                  </span>
-                  <span className="font-bold text-sm text-gray-600 dark:text-white flex items-center gap-1">
-                    {twitterUser.price}
-                  </span>
+                  <div className="flex">
+                    <span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
+                      Created: {convertToRelativeTime(twitterUser.created_time)}&nbsp;
+                    </span>
+                    <span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
+                      | Price: {twitterUser.price}
+                    </span>
+                  </div>
                 </div>
               </div>
             </li>

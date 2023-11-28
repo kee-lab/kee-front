@@ -460,3 +460,18 @@ export const encodeBase64 = (str = "") => btoa(unescape(encodeURIComponent(str))
 export const shouldPreviewImage = (type: string) => {
   return type.startsWith("image") && type !== "image/x-sony-arw";
 };
+
+export const convertToRelativeTime = (time: number | Date) => {
+  if (time instanceof Date) {
+    time = time.getTime();
+  }
+  const now = new Date();
+  const diffInMilliseconds = now.getTime() - time;
+  const diffInMinutes = Math.round(diffInMilliseconds / 1000 / 60);
+
+  if (diffInMinutes > 60) {
+    return `${Math.round(diffInMinutes / 60)} hours ago`;
+  }
+
+  return `${diffInMinutes} minutes ago`;
+};
