@@ -20,6 +20,9 @@ import UserIcon from "@/assets/icons/user.svg";
 import FavIcon from "@/assets/icons/bookmark.svg";
 import FolderIcon from "@/assets/icons/folder.svg";
 import Menu from "./Menu";
+import { ApiPromise, WsProvider } from "@polkadot/api";
+import { Keyring } from "@polkadot/keyring";
+import { cryptoWaitReady, mnemonicGenerate } from "@polkadot/util-crypto";
 
 function HomePage() {
   console.log("in home page!!!");
@@ -32,15 +35,19 @@ function HomePage() {
   //   return <Loading reload={true} fullscreen={true} context="home-route" />;
   // }
 
-  const createNewWallet = () => {
+  const createNewWallet = async () => {
     alert("createNewWallet!");
-    const user_wallet = Wallet.createRandom();
-    console.log("private key:" + user_wallet.privateKey);
-    localStorage.setItem(KEY_WALLET_PRIVATE_KEY, user_wallet.privateKey);
-    console.log("address key:" + user_wallet.address);
-    localStorage.setItem(KEY_WALLET_ADDRESS, user_wallet.address);
-    console.log("memo word:" + JSON.stringify(user_wallet.mnemonic));
-    let normalWallet: Wallet = new Wallet(user_wallet.privateKey);
+    const provider = new WsProvider("wss://testnet.vara-network.io");
+    const api = await ApiPromise.create({ provider: provider });
+    console.log("private key:" + api.genesisHash.toHex());
+    localStorage.setItem(KEY_WALLET_PRIVATE_KEY, api.genesisHash.toHex());
+    const keyring = new Keyring({ type: "sr25519" });
+    const alice = keyring.addFromUri("//Alice", { name: "Alice Default" });
+    console.log("address key:" + alice.address);
+    localStorage.setItem(KEY_WALLET_ADDRESS, alice.address);
+    const mnemonic = mnemonicGenerate();
+    console.log("memo word:", mnemonic);
+    let normalWallet: Wallet = new Wallet(api.genesisHash.toHex());
     return normalWallet;
   };
 
