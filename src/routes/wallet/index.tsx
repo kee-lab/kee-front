@@ -4,6 +4,9 @@ import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
+import { ApiPromise, WsProvider } from "@polkadot/api";
+import { Keyring } from "@polkadot/keyring";
+import { cryptoWaitReady, mnemonicGenerate } from "@polkadot/util-crypto";
 
 const NETWORK = "arbitrum-sepolia";
 //在infura中申请的key
@@ -12,14 +15,24 @@ const JSON_RPC_URL = "https://arbitrum-sepolia.infura.io/v3/53119e34e0294563ab8d
 const contractAddress = "0x6c50E3C83d7710DE9a993dac8bBC990e459e3865";
 
 //创建一个新的钱包账户
-export const createNewWallet = () => {
-  const user_wallet = Wallet.createRandom();
-  console.log("private key:" + user_wallet.privateKey);
-  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, user_wallet.privateKey);
-  console.log("address key:" + user_wallet.address);
-  localStorage.setItem(KEY_WALLET_ADDRESS, user_wallet.address);
-  console.log("memo word:" + JSON.stringify(user_wallet.mnemonic));
-  let normalWallet: Wallet = new Wallet(user_wallet.privateKey);
+export const createNewWallet = async () => {
+  const keyring = new Keyring({ type: "sr25519" });
+  const mnemonic = mnemonicGenerate();
+  const normalWallet = keyring.addFromUri(mnemonic, { name: "User Default" });
+  const password = "password";
+  const encodedPrivateKey = normalWallet.encodePkcs8(password);
+
+  // 解锁私钥（需要提供正确的密码）
+  // normalWallet.decodePkcs8(password, encodedPrivateKey);
+
+  // 存储私钥和地址到本地存储
+  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, Buffer.from(encodedPrivateKey).toString("hex"));
+  localStorage.setItem(KEY_WALLET_ADDRESS, normalWallet.address);
+
+  console.log("privateKey key:", encodedPrivateKey);
+  console.log("address key:", normalWallet.address);
+  console.log("memo word:", mnemonic);
+
   return normalWallet;
 };
 
