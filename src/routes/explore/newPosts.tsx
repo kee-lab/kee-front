@@ -41,6 +41,8 @@ function newPostPage() {
     { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: twitterUsers }
   ] = useLazyGetTwitterListLastQuery();
 
+  console.log({ twitterUsers });
+
   useEffect(() => {
     getNewTwitterInfo();
   }, []);
@@ -73,7 +75,7 @@ function newPostPage() {
                       Created: {convertToRelativeTime(twitterUser.created_time)}&nbsp;
                     </span>
                     <span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
-                      | Price: {twitterUser.price}
+                      | Price: {twitterUser.price / 1000000000000}
                     </span>
                   </div>
                 </div>
