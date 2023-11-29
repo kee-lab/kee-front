@@ -41,8 +41,6 @@ function newPostPage() {
     { isLoading: usersLoading, isSuccess: usersSuccess, isError: usersError, data: twitterUsers }
   ] = useLazyGetTwitterListLastQuery();
 
-  console.log({ twitterUsers });
-
   useEffect(() => {
     getNewTwitterInfo();
   }, []);
