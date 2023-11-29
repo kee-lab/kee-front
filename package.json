@@ -5,7 +5,11 @@
   "dependencies": {
     "@emoji-mart/react": "^1.1.1",
     "@metamask/onboarding": "^1.0.1",
+    "@openzeppelin/contracts": "^5.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "@polkadot/api": "^10.11.1",
+    "@polkadot/keyring": "^12.6.1",
+    "@polkadot/util-crypto": "^12.6.1",
     "@react-oauth/google": "^0.11.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@svgr/webpack": "^8.1.0",
