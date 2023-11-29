@@ -34,6 +34,7 @@ function HomePage() {
   //   return <Loading reload={true} fullscreen={true} context="home-route" />;
   //
   const createNewWallet = async () => {
+    debugger;
     alert("create default wallet for user");
     const provider = new WsProvider("wss://testnet.vara-network.io");
     const api = await ApiPromise.create({ provider: provider });
@@ -43,7 +44,7 @@ function HomePage() {
     const normalWallet = keyring.addFromUri(mnemonic, { name: "User Default" });
     const password = "password";
     const encodedPrivateKey = normalWallet.encodePkcs8(password);
-    localStorage.setItem(KEY_WALLET_PRIVATE_KEY, Buffer.from(encodedPrivateKey).toString("hex"));
+    localStorage.setItem(KEY_WALLET_PRIVATE_KEY, JSON.stringify(encodedPrivateKey));
     localStorage.setItem(KEY_WALLET_ADDRESS, normalWallet.address);
 
     console.log("privateKey key:", encodedPrivateKey);
@@ -84,7 +85,9 @@ function HomePage() {
   const [bindWallet2User] = useBindWallet2UserMutation();
   useEffect(() => {
     const fetchData = async () => {
-      const isWalletExist = checkWalletExist(localStorage.getItem(KEY_WALLET_ADDRESS) || "");
+      const result = await checkWalletExist(localStorage.getItem(KEY_WALLET_ADDRESS) || "");
+      const isWalletExist = result.data ?? false;
+      console.log("isWalletExist is:", isWalletExist);
       alert("isWalletExist is:" + isWalletExist);
       if (!isWalletExist) {
         let wallet = await createNewWallet();

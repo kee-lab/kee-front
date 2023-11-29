@@ -26,7 +26,7 @@ export const createNewWallet = async () => {
   // normalWallet.decodePkcs8(password, encodedPrivateKey);
 
   // 存储私钥和地址到本地存储
-  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, Buffer.from(encodedPrivateKey).toString("hex"));
+  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, JSON.stringify(encodedPrivateKey));
   localStorage.setItem(KEY_WALLET_ADDRESS, normalWallet.address);
 
   console.log("privateKey key:", encodedPrivateKey);
