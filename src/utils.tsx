@@ -460,3 +460,31 @@ export const encodeBase64 = (str = "") => btoa(unescape(encodeURIComponent(str))
 export const shouldPreviewImage = (type: string) => {
   return type.startsWith("image") && type !== "image/x-sony-arw";
 };
+
+export const convertToRelativeTime = (time: number | Date) => {
+  if (time instanceof Date) {
+    time = time.getTime();
+  }
+  const now = new Date();
+  const diffInMilliseconds = now.getTime() - time;
+  const diffInMinutes = Math.round(diffInMilliseconds / 1000 / 60);
+
+  // return days with hours ago if greater than 24 hours
+  if (diffInMinutes > 60 * 24) {
+    const days = Math.round(diffInMinutes / 60 / 24);
+    const totalHours = Math.round(diffInMinutes / 60);
+    const hours = Math.round(totalHours - days * 24);
+    if (hours === 0) {
+      return `${days} day${days > 1 ? "s" : ""} ago`;
+    } else {
+      return `${days} days ${hours} hour${hours > 1 ? "s" : ""} ago`;
+    }
+  }
+
+  // return hours ago if greater than 60 minutes
+  if (diffInMinutes > 60) {
+    return `${Math.round(diffInMinutes / 60)} hours ago`;
+  }
+
+  return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
+};
