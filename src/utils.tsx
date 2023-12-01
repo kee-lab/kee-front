@@ -471,8 +471,8 @@ export const convertToRelativeTime = (time: number | Date) => {
 
   // return days with hours ago if greater than 24 hours
   if (diffInMinutes > 60 * 24) {
-    const days = Math.round(diffInMinutes / 60 / 24);
-    const totalHours = Math.round(diffInMinutes / 60);
+    const days = Math.floor(diffInMinutes / 60 / 24);
+    const totalHours = Math.ceil(diffInMinutes / 60);
     const hours = Math.round(totalHours - days * 24);
     if (hours === 0) {
       return `${days} day${days > 1 ? "s" : ""} ago`;
