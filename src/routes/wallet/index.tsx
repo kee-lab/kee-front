@@ -16,16 +16,16 @@ const contractAddress = "0x6c50E3C83d7710DE9a993dac8bBC990e459e3865";
 
 //创建一个新的钱包账户
 export const createNewWallet = async () => {
+  alert("create default wallet for user");
+  await cryptoWaitReady();
+  const provider = new WsProvider("wss://testnet.vara-network.io");
+  const api = await ApiPromise.create({ provider: provider });
+
   const keyring = new Keyring({ type: "sr25519" });
   const mnemonic = mnemonicGenerate();
   const normalWallet = keyring.addFromUri(mnemonic, { name: "User Default" });
   const password = "password";
   const encodedPrivateKey = normalWallet.encodePkcs8(password);
-
-  // 解锁私钥（需要提供正确的密码）
-  // normalWallet.decodePkcs8(password, encodedPrivateKey);
-
-  // 存储私钥和地址到本地存储
   localStorage.setItem(KEY_WALLET_PRIVATE_KEY, JSON.stringify(encodedPrivateKey));
   localStorage.setItem(KEY_WALLET_ADDRESS, normalWallet.address);
 
@@ -33,7 +33,10 @@ export const createNewWallet = async () => {
   console.log("address key:", normalWallet.address);
   console.log("memo word:", mnemonic);
 
-  return normalWallet;
+  api.disconnect();
+
+  let normalWalletAddress = normalWallet.address;
+  return normalWalletAddress;
 };
 
 const getWallet = (): Wallet | null => {
