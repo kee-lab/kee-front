@@ -8,6 +8,7 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import { Keyring } from "@polkadot/keyring";
 import { cryptoWaitReady, mnemonicGenerate } from "@polkadot/util-crypto";
 import { KeyringPair } from "@polkadot/keyring/types";
+import { GearKeyring } from "@gear-js/api";
 
 const NETWORK = "arbitrum-sepolia";
 //在infura中申请的key
@@ -20,32 +21,27 @@ export const createNewWallet = async () => {
   alert("create default wallet for user");
   await cryptoWaitReady();
   const provider = new WsProvider("wss://testnet.vara-network.io");
-  const api = await ApiPromise.create({ provider: provider });
 
-  const keyring = new Keyring({ type: "sr25519" });
-  const mnemonic = mnemonicGenerate();
-  const normalWallet: KeyringPair = keyring.addFromUri(mnemonic, { name: "User Default" });
-  const password = "password";
-  const encodedPrivateKey = normalWallet.encodePkcs8(password);
-  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, JSON.stringify(encodedPrivateKey));
-  localStorage.setItem(KEY_WALLET_ADDRESS, normalWallet.address);
+  const mnemonic = GearKeyring.generateMnemonic();
+  const { seed } = GearKeyring.generateSeed(mnemonic);
+  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, seed);
+  const keyring: KeyringPair = await GearKeyring.fromSeed(seed, "name");
 
-  console.log("privateKey key:", encodedPrivateKey);
-  console.log("address key:", normalWallet.address);
-  console.log("memo word:", mnemonic);
+  localStorage.setItem(KEY_WALLET_ADDRESS, keyring.address);
 
-  api.disconnect();
+  console.log("keyring.address:", keyring.address);
+  console.log("seed:", seed);
 
-  let normalWalletAddress = normalWallet.address;
-  return normalWalletAddress;
+  let walletAddress = keyring.address;
+  return walletAddress;
 };
 
-const getGearWallet = (): KeyringPair | null => {
-  const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+export const getGearWallet = async (): Promise<KeyringPair | null> => {
+  const seed = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
   let wallet = null;
-  if (privateKey) {
-    const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
-    wallet = new Wallet(privateKey, provider);
+  if (seed) {
+    const keyring = await GearKeyring.fromSeed(seed, "name");
+    wallet = keyring;
   }
   return wallet;
 };

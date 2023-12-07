@@ -2,7 +2,7 @@ import React from "react";
 import { ProgramMetadata } from "@gear-js/api";
 import useGearApi from "@/hooks/useGearApi";
 import Keyring from "@polkadot/keyring";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
+import getGearWallet from "@/routes/wallet/index";
 import { KeyringPair } from "@polkadot/keyring/types";
 
 const BuyShare: React.FC = () => {
@@ -14,9 +14,7 @@ const BuyShare: React.FC = () => {
       return;
     }
 
-    const keyring = new Keyring({ type: "sr25519" });
-    const mnemonic = mnemonicGenerate();
-    const normalWallet: KeyringPair = keyring.addFromUri(mnemonic, { name: "User Default" });
+    const kering: KeyringPair | null = await getGearWallet();
 
     try {
       const account = "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a";
@@ -39,7 +37,7 @@ const BuyShare: React.FC = () => {
       console.log("meta is {}", JSON.stringify(meta));
       // In that case payload will be encoded using meta.types.handle.input type
       const tx = gearApi.message.send(message, meta, 0);
-      tx.signAndSend(normalWallet, ({ events }) => {
+      tx.signAndSend(kering, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // So if you want to use another type you can specify it
