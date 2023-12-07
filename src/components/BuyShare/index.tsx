@@ -5,7 +5,7 @@ import useGearApi from "@/hooks/useGearApi";
 const BuyShare: React.FC = () => {
   const { gearApi } = useGearApi();
 
-  const buyShare = async (uid: number) => {
+  const buyShare = async () => {
     if (!gearApi) {
       console.error("gearApi is null");
       return;
@@ -13,7 +13,8 @@ const BuyShare: React.FC = () => {
     try {
       const account = "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a";
       const message = {
-        destination: "0x1371d9c044ff3f249eb6a647c4807ed5e4f07ef98ea62a7043e9546b547503e5", // programId
+        destination:
+          "0x1371d9c044ff3f249eb6a647c4807ed5e4f07ef98ea62a7043e9546b547503e5" as `0x${string}`, // programId
         payload: {
           shares_subject: "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a",
           amount: 1
@@ -30,13 +31,13 @@ const BuyShare: React.FC = () => {
       console.log("meta is {}", JSON.stringify(meta));
       // In that case payload will be encoded using meta.types.handle.input type
       const tx = gearApi.message.send(message, meta, 0);
-      tx.signAndSend(account, (events) => {
+      tx.signAndSend(account, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
     } catch (error) {
-      console.error(`${error.name}: ${error.message}`);
+      console.error(error);
     }
     // try {
     //   await extrinsic.signAndSend(keyring, (event) => {
