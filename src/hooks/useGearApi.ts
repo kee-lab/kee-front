@@ -9,11 +9,16 @@ export default function useGearApi() {
   useEffect(() => {
     // Your code to initialize the gearApi object goes here
     const initializeGearApi = async () => {
-      // Example code to fetch the gearApi object from an API
-      const gearApi = await GearApi.create({
-        providerAddress: GEAR_TEST_RPC
-      });
-      setGearApi(gearApi);
+      try {
+        const gearApi = await GearApi.create({
+          providerAddress: GEAR_TEST_RPC
+        });
+        setGearApi(gearApi);
+        console.log("GearApi initialized");
+      } catch (err) {
+        console.error("Failed to initialize gearApi");
+        console.error(err);
+      }
     };
 
     initializeGearApi();
