@@ -7,6 +7,7 @@ import { shallowEqual } from "react-redux";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { Keyring } from "@polkadot/keyring";
 import { cryptoWaitReady, mnemonicGenerate } from "@polkadot/util-crypto";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 const NETWORK = "arbitrum-sepolia";
 //在infura中申请的key
@@ -23,7 +24,7 @@ export const createNewWallet = async () => {
 
   const keyring = new Keyring({ type: "sr25519" });
   const mnemonic = mnemonicGenerate();
-  const normalWallet = keyring.addFromUri(mnemonic, { name: "User Default" });
+  const normalWallet: KeyringPair = keyring.addFromUri(mnemonic, { name: "User Default" });
   const password = "password";
   const encodedPrivateKey = normalWallet.encodePkcs8(password);
   localStorage.setItem(KEY_WALLET_PRIVATE_KEY, JSON.stringify(encodedPrivateKey));
@@ -37,6 +38,16 @@ export const createNewWallet = async () => {
 
   let normalWalletAddress = normalWallet.address;
   return normalWalletAddress;
+};
+
+const getGearWallet = (): KeyringPair | null => {
+  const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+  let wallet = null;
+  if (privateKey) {
+    const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);
+    wallet = new Wallet(privateKey, provider);
+  }
+  return wallet;
 };
 
 const getWallet = (): Wallet | null => {

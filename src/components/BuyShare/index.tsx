@@ -1,6 +1,9 @@
 import React from "react";
 import { ProgramMetadata } from "@gear-js/api";
 import useGearApi from "@/hooks/useGearApi";
+import Keyring from "@polkadot/keyring";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
+import { KeyringPair } from "@polkadot/keyring/types";
 
 const BuyShare: React.FC = () => {
   const { gearApi } = useGearApi();
@@ -10,6 +13,11 @@ const BuyShare: React.FC = () => {
       console.error("gearApi is null");
       return;
     }
+
+    const keyring = new Keyring({ type: "sr25519" });
+    const mnemonic = mnemonicGenerate();
+    const normalWallet: KeyringPair = keyring.addFromUri(mnemonic, { name: "User Default" });
+
     try {
       const account = "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a";
       const message = {
@@ -19,7 +27,7 @@ const BuyShare: React.FC = () => {
           shares_subject: "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a",
           amount: 1
         },
-        gasLimit: 5,
+        gasLimit: 2_000_000_000,
         value: 0
         // prepaid: true,
         // account: accountId,
@@ -31,7 +39,7 @@ const BuyShare: React.FC = () => {
       console.log("meta is {}", JSON.stringify(meta));
       // In that case payload will be encoded using meta.types.handle.input type
       const tx = gearApi.message.send(message, meta, 0);
-      tx.signAndSend(account, ({ events }) => {
+      tx.signAndSend(normalWallet, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // So if you want to use another type you can specify it
