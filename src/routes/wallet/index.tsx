@@ -24,23 +24,24 @@ export const createNewWallet = async () => {
 
   const mnemonic = GearKeyring.generateMnemonic();
   const { seed } = GearKeyring.generateSeed(mnemonic);
-  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, seed);
+  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, mnemonic);
   const keyring: KeyringPair = await GearKeyring.fromSeed(seed, "name");
 
   localStorage.setItem(KEY_WALLET_ADDRESS, keyring.address);
 
   console.log("keyring.address:", keyring.address);
-  console.log("seed:", seed);
+  console.log("seed:", mnemonic);
 
   let walletAddress = keyring.address;
   return walletAddress;
 };
 
 export const getGearWallet = async (): Promise<KeyringPair | null> => {
-  const seed = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+  const mnemonic = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
   let wallet = null;
-  if (seed) {
-    const keyring = await GearKeyring.fromSeed(seed, "name");
+  if (mnemonic) {
+    const keyring = await GearKeyring.fromMnemonic(mnemonic, "name");
+    console.log("keyring.address", keyring.address);
     wallet = keyring;
   }
   return wallet;

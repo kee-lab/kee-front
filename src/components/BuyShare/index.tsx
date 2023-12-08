@@ -17,12 +17,11 @@ const BuyShare: React.FC = () => {
     const kering: KeyringPair | null = await getGearWallet();
 
     try {
-      const account = "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a";
       const message = {
         destination:
           "0x1371d9c044ff3f249eb6a647c4807ed5e4f07ef98ea62a7043e9546b547503e5" as `0x${string}`, // programId
         payload: {
-          shares_subject: "0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a",
+          shares_subject: "0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f",
           amount: 1
         },
         gasLimit: 2_000_000_000,
