@@ -102,7 +102,7 @@ function myWallet() {
     // 检查用户钱包地址是否存在.
     const uid = loginUser?.uid;
     if (uid) {
-      let shareWallet = await getWalletByUid(2);
+      let shareWallet = await getWalletByUid(uid);
       console.log("shareWallet is" + JSON.stringify(shareWallet.data));
       // console.log("shareWallet is:" + shareWallet);
       if (shareWallet.data) {

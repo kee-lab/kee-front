@@ -2,7 +2,7 @@ import React from "react";
 import { ProgramMetadata } from "@gear-js/api";
 import useGearApi from "@/hooks/useGearApi";
 import Keyring from "@polkadot/keyring";
-import getGearWallet from "@/routes/wallet/index";
+import { getGearWallet } from "@/routes/wallet/index";
 import { KeyringPair } from "@polkadot/keyring/types";
 
 const BuyShare: React.FC = () => {
@@ -37,9 +37,10 @@ const BuyShare: React.FC = () => {
       console.log("meta is {}", JSON.stringify(meta));
       // In that case payload will be encoded using meta.types.handle.input type
       const tx = gearApi.message.send(message, meta, 0);
-      tx.signAndSend(kering, ({ events }) => {
+      const tx_hash = await tx.signAndSend(kering, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
+      console.log("tx_hash is:", tx_hash);
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
     } catch (error) {
