@@ -18,8 +18,7 @@ const BuyShare: React.FC = () => {
 
     try {
       const message = {
-        destination:
-          "0x1371d9c044ff3f249eb6a647c4807ed5e4f07ef98ea62a7043e9546b547503e5" as `0x${string}`, // programId
+        destination: "0x1371d9c044ff3f249eb6a647c4807ed5e4f07ef98ea62a7043e9546b547503e5", // programId
         payload: {
           shares_subject: "0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f",
           amount: 1
@@ -36,10 +35,11 @@ const BuyShare: React.FC = () => {
       console.log("meta is {}", JSON.stringify(meta));
       // In that case payload will be encoded using meta.types.handle.input type
       const tx = gearApi.message.send(message, meta, 0);
-      const tx_hash = await tx.signAndSend(kering, ({ events }) => {
+
+      const tx_hash = await gearApi.message.signAndSend(kering, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
-      console.log("tx_hash is:", tx_hash);
+      console.log("tx_hash is:{}", tx_hash);
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
     } catch (error) {
