@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { GearApi } from "@gear-js/api";
 
 const GEAR_TEST_RPC = "wss://testnet.vara-network.io";
+// const GEAR_TEST_RPC = "ws://localhost:9944";
 
 export default function useGearApi() {
   const [gearApi, setGearApi] = useState<GearApi>();
