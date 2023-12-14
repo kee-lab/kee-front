@@ -45,6 +45,13 @@ export const channelApi = createApi({
         })
       }
     ),
+    createSelfChannel: builder.mutation<{ gid: number; created_at: number } | number, void>({
+      query: (data) => ({
+        url: "/group/init_self_group",
+        method: "POST",
+        body: data
+      })
+    }),
     changeChannelType: builder.mutation<
       number,
       { is_public: boolean; id: number; members?: number[] }
