@@ -13,6 +13,7 @@ import { RootState } from "../store";
 // import toast from "react-hot-toast";
 import baseQuery from "./base.query";
 import { onMessageSendStarted } from "./handlers";
+import { Group } from "@/types/group";
 
 export const channelApi = createApi({
   reducerPath: "channelApi",
@@ -46,10 +47,19 @@ export const channelApi = createApi({
       }
     ),
     createSelfChannel: builder.mutation<{ gid: number; created_at: number } | number, void>({
-      query: (data) => ({
+      query: () => ({
         url: "/group/init_self_group",
-        method: "POST",
-        body: data
+        method: "POST"
+      })
+    }),
+    querySelfChannel: builder.query<Group, void>({
+      query: () => ({
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+          accept: "application/json; charset=utf-8"
+        },
+        url: `/group/getGroupByOwner`,
+        responseHandler: "application/json; charset=utf-8"
       })
     }),
     changeChannelType: builder.mutation<
@@ -256,5 +266,7 @@ export const {
   useAddMembersMutation,
   useRemoveMembersMutation,
   useUpdateIconMutation,
+  useCreateSelfChannelMutation,
+  useLazyQuerySelfChannelQuery,
   useLazyClearChannelMessageQuery
 } = channelApi;

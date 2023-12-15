@@ -21,6 +21,7 @@ import UserIcon from "@/assets/icons/user.svg";
 import FavIcon from "@/assets/icons/bookmark.svg";
 import FolderIcon from "@/assets/icons/folder.svg";
 import Menu from "./Menu";
+import { useLazyQuerySelfChannelQuery } from "@/app/services/channel";
 
 function HomePage() {
   console.log("in home page!!!");
@@ -57,6 +58,7 @@ function HomePage() {
 
   //检查用户是否有钱包,如果没有钱包,则生成一个钱包给用户.
   const [checkWalletExist, { isLoading }] = useLazyCheckWalletExistQuery();
+  const [checkSelfGroupExist] = useLazyQuerySelfChannelQuery();
   const [bindWallet2User] = useBindWallet2UserMutation();
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +70,8 @@ function HomePage() {
         let wallet = await createNewWallet();
         bindWallet2User(wallet);
       }
+      const selfGroup = await checkSelfGroupExist();
+      console.log("selfGroup is:", selfGroup);
     };
     fetchData();
   }, []);
