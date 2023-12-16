@@ -21,7 +21,7 @@ import UserIcon from "@/assets/icons/user.svg";
 import FavIcon from "@/assets/icons/bookmark.svg";
 import FolderIcon from "@/assets/icons/folder.svg";
 import Menu from "./Menu";
-import { useLazyQuerySelfChannelQuery } from "@/app/services/channel";
+import { useCreateSelfChannelMutation, useLazyQuerySelfChannelQuery } from "@/app/services/channel";
 
 function HomePage() {
   console.log("in home page!!!");
@@ -60,6 +60,7 @@ function HomePage() {
   const [checkWalletExist, { isLoading }] = useLazyCheckWalletExistQuery();
   const [checkSelfGroupExist] = useLazyQuerySelfChannelQuery();
   const [bindWallet2User] = useBindWallet2UserMutation();
+  const [createSelfChannel] = useCreateSelfChannelMutation();
   useEffect(() => {
     const fetchData = async () => {
       const result = await checkWalletExist(localStorage.getItem(KEY_WALLET_ADDRESS) || "");
@@ -71,6 +72,10 @@ function HomePage() {
         bindWallet2User(wallet);
       }
       const selfGroup = await checkSelfGroupExist();
+      if (selfGroup.data === "null") {
+        // create group
+        createSelfChannel();
+      }
       console.log("selfGroup is:", selfGroup);
     };
     fetchData();

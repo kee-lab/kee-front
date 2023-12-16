@@ -52,7 +52,7 @@ export const channelApi = createApi({
         method: "POST"
       })
     }),
-    querySelfChannel: builder.query<Group, void>({
+    querySelfChannel: builder.query<Group | string, void>({
       query: () => ({
         headers: {
           "content-type": "application/json; charset=utf-8",
