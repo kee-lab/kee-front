@@ -5,6 +5,7 @@ import Keyring from "@polkadot/keyring";
 import { getGearWallet } from "@/routes/wallet/index";
 import { KeyringPair } from "@polkadot/keyring/types";
 import MetaText from "@/assets/gear_friend_share.meta.txt";
+import { ethers } from "ethers";
 
 const BuyShare: React.FC = () => {
   const [metaData, setMetaData] = React.useState({} as ProgramMetadata);
@@ -18,23 +19,19 @@ const BuyShare: React.FC = () => {
       });
   }, [MetaText]);
 
-  // TODO 如果api未能正常初始化，则等待api初始化完成。
   const { gearApi } = useGearApi();
   if (!gearApi) {
     return <div>loading...</div>;
   }
-  // TODO shareSubject 为好友的地址，应该改为从参数传入。
-  const sharesSubject = "0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f";
 
   // TODO 合约地址。应该从.env或者配置文件中读取该变量
-  // const programId = "0x176ab34b059dde82bcc938179b63042153bda6abab61223ca74081ee2469200c";
   const programId =
     (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
     "0xc87e3c70da3745ddef654869da9ae6fda550e7cc01338a3765e438696363a7af";
 
   console.log("meta is {}", JSON.stringify(metaData));
 
-  const buyShare = async () => {
+  const buyShare = async (sharesSubject: `0x${string}`) => {
     if (!gearApi) {
       console.error("gearApi is null");
       return;
@@ -59,7 +56,8 @@ const BuyShare: React.FC = () => {
     const buyPriceAfterFee = buyPriceAfterFeeResponse.toHuman() as any;
     // TODO 该价格为购买好友share的价格，将该值转成bigNumber并设置到购买函数的出价内。
     const buyPrice = buyPriceAfterFee.Price;
-    console.log("buyPrice is:", buyPrice);
+    const bigBuyPrice = ethers.parseUnits(buyPrice.replace(/,/g, ""));
+    console.log("buyPrice is:", bigBuyPrice);
 
     try {
       const gas = await gearApi.program.calculateGas.handle(
@@ -126,7 +124,13 @@ const BuyShare: React.FC = () => {
     // }
   };
 
-  return <button onClick={buyShare}>Buy</button>;
+  return (
+    <button
+      onClick={() => buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f")}
+    >
+      Buy
+    </button>
+  );
 };
 
 export default BuyShare;
