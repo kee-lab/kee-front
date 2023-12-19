@@ -38,7 +38,9 @@ const BuyShare: React.FC = () => {
     }
 
     const kering: KeyringPair | null = await getGearWallet();
-
+    // 获取用户的地址
+    let address = kering?.address;
+    let wallet = u8aToHex(address);
     // query the price of state，
     const buyPriceAfterFeeResponse = await gearApi.programState.read(
       {
@@ -61,7 +63,7 @@ const BuyShare: React.FC = () => {
 
     try {
       const gas = await gearApi.program.calculateGas.handle(
-        sharesSubject, // source id TODO 此次应该设置为用户钱包地址
+        wallet, // source id TODO 此次应该设置为用户钱包地址
         programId, // program id
         {
           buyShare: {
@@ -69,7 +71,7 @@ const BuyShare: React.FC = () => {
             amount: "1"
           }
         }, // payload
-        0, // value 将价格设置到此处
+        bigBuyPrice, // value 将价格设置到此处
         false, // allow other panics
         metaData
       );
@@ -83,8 +85,8 @@ const BuyShare: React.FC = () => {
             amount: "1"
           }
         },
-        gasLimit: 4_107_353_945, // TODO 此次应该设置为gas
-        value: 0 // 将计算出来的价格设置到此处
+        gasLimit: gas.toHuman(), // TODO 此次应该设置为gas
+        value: bigBuyPrice // 将计算出来的价格设置到此处
         // prepaid: true,
         // account: accountId,
         // if you send message with issued voucher
@@ -106,7 +108,7 @@ const BuyShare: React.FC = () => {
 
       const tx = gearApi.message.send(message, metaData);
 
-      const tx_hash = await tx.signAndSend(kering, ({ events }) => {
+      const tx_hash = await tx.signAndSend(wallet, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // console.log("tx_hash is:{}", tx_hash);
