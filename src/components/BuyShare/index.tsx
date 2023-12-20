@@ -6,6 +6,7 @@ import { getGearWallet } from "@/routes/wallet/index";
 import { KeyringPair } from "@polkadot/keyring/types";
 import MetaText from "@/assets/gear_friend_share.meta.txt";
 import { ethers } from "ethers";
+import { u8aToHex } from "@polkadot/util/u8a/toHex";
 
 const BuyShare: React.FC = () => {
   const [metaData, setMetaData] = React.useState({} as ProgramMetadata);
@@ -37,10 +38,11 @@ const BuyShare: React.FC = () => {
       return;
     }
 
+    const keyring = new Keyring();
     const kering: KeyringPair | null = await getGearWallet();
     // 获取用户的地址
     let address = kering?.address;
-    let wallet = u8aToHex(address);
+    let wallet = u8aToHex(keyring.decodeAddress(address));
     // query the price of state，
     const buyPriceAfterFeeResponse = await gearApi.programState.read(
       {
