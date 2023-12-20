@@ -39,10 +39,11 @@ const BuyShare: React.FC = () => {
     }
 
     const keyring = new Keyring();
-    const kering: KeyringPair | null = await getGearWallet();
+    const keyingPair: KeyringPair | null = await getGearWallet();
     // 获取用户的地址
-    let address = kering?.address;
+    let address = keyingPair?.address;
     let wallet = u8aToHex(keyring.decodeAddress(address));
+    console.log("wallet is:{}", wallet);
     // query the price of state，
     const buyPriceAfterFeeResponse = await gearApi.programState.read(
       {
@@ -56,7 +57,7 @@ const BuyShare: React.FC = () => {
       },
       metaData
     );
-    // console.log("meta.getAllTypes() is:{}", meta.getAllTypes());
+    console.log("buyPriceAfterFeeResponse is:{}", buyPriceAfterFeeResponse.toHuman());
     const buyPriceAfterFee = buyPriceAfterFeeResponse.toHuman() as any;
     // TODO 该价格为购买好友share的价格，将该值转成bigNumber并设置到购买函数的出价内。
     const buyPrice = buyPriceAfterFee.Price;
