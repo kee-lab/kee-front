@@ -52,6 +52,12 @@ export const channelApi = createApi({
         method: "POST"
       })
     }),
+    attendChannel: builder.mutation<void, string>({
+      query: (ownerId) => ({
+        url: `/${ownerId}/attend`,
+        method: "POST"
+      })
+    }),
     querySelfChannel: builder.query<Group | string, void>({
       query: () => ({
         headers: {
@@ -267,6 +273,7 @@ export const {
   useRemoveMembersMutation,
   useUpdateIconMutation,
   useCreateSelfChannelMutation,
+  useAttendChannelMutation,
   useLazyQuerySelfChannelQuery,
   useLazyClearChannelMessageQuery
 } = channelApi;

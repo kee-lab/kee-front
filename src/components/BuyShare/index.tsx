@@ -7,9 +7,11 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import MetaText from "@/assets/gear_friend_share.meta.txt";
 import { ethers } from "ethers";
 import { u8aToHex } from "@polkadot/util/u8a/toHex";
+import { useAttendChannelMutation } from "@/app/services/channel";
 
 const BuyShare: React.FC = () => {
   const [metaData, setMetaData] = React.useState({} as ProgramMetadata);
+  const [attendChannel] = useAttendChannelMutation();
 
   useEffect(() => {
     fetch(MetaText)
@@ -36,7 +38,7 @@ const BuyShare: React.FC = () => {
 
   console.log("meta is {}", JSON.stringify(metaData));
 
-  const buyShare = async (sharesSubject: `0x${string}`) => {
+  const buyShare = async (sharesSubject: `0x${string}`, userId: string) => {
     if (!gearApi) {
       console.error("gearApi is null");
       return;
@@ -122,12 +124,14 @@ const BuyShare: React.FC = () => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // TODO join subject group
+      attendChannel(userId);
       // console.log("tx_hash is:{}", tx_hash);
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
     } catch (error) {
       console.error(error);
     }
+
     // try {
     //   await extrinsic.signAndSend(keyring, (event) => {
     //     console.log(event.toHuman());
@@ -139,7 +143,9 @@ const BuyShare: React.FC = () => {
 
   return (
     <button
-      onClick={() => buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f")}
+      onClick={() =>
+        buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f", "5")
+      }
       // onClick={() => buyShare("0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a")} // for local test
     >
       Buy
