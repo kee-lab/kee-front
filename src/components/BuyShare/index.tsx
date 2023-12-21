@@ -138,8 +138,8 @@ const BuyShare: React.FC = () => {
 
   return (
     <button
-      // onClick={() => buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f")}
-      onClick={() => buyShare("0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a")} // for local test
+      onClick={() => buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f")}
+      // onClick={() => buyShare("0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a")} // for local test
     >
       Buy
     </button>
