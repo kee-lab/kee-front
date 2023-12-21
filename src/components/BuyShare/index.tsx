@@ -25,10 +25,14 @@ const BuyShare: React.FC = () => {
     return <div>loading...</div>;
   }
 
-  // TODO 合约地址。应该从.env或者配置文件中读取该变量
+  // // TODO 合约地址。应该从.env或者配置文件中读取该变量
+  // const programId =
+  //   (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
+  //   "0xc87e3c70da3745ddef654869da9ae6fda550e7cc01338a3765e438696363a7af";
+  // TODO 合约地址。应该从.env或者配置文件中读取该变量 local test
   const programId =
     (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
-    "0xc87e3c70da3745ddef654869da9ae6fda550e7cc01338a3765e438696363a7af";
+    "0xb43ac222239662185a8580dccc89bc3c276d84b409d85d6f40369600af7ccb72";
 
   console.log("meta is {}", JSON.stringify(metaData));
 
@@ -42,6 +46,7 @@ const BuyShare: React.FC = () => {
     const keyingPair: KeyringPair | null = await getGearWallet();
     // 获取用户的地址
     let address = keyingPair?.address;
+    console.log("wallet address is", address);
     let wallet = u8aToHex(keyring.decodeAddress(address));
     console.log("wallet is:{}", wallet);
     // query the price of state，
@@ -61,7 +66,7 @@ const BuyShare: React.FC = () => {
     const buyPriceAfterFee = buyPriceAfterFeeResponse.toHuman() as any;
     // TODO 该价格为购买好友share的价格，将该值转成bigNumber并设置到购买函数的出价内。
     const buyPrice = buyPriceAfterFee.Price;
-    const bigBuyPrice = ethers.parseUnits(buyPrice.replace(/,/g, ""));
+    const bigBuyPrice = buyPrice.replace(/,/g, "");
     console.log("buyPrice is:", bigBuyPrice);
 
     try {
@@ -71,15 +76,17 @@ const BuyShare: React.FC = () => {
         {
           buyShare: {
             shares_subject: sharesSubject,
-            amount: "1"
+            amount: 1
           }
         }, // payload
         bigBuyPrice, // value 将价格设置到此处
-        false, // allow other panics
+        true, // allow other panics
         metaData
       );
-      console.log(gas.toHuman());
-
+      console.log("gas is.....", gas.toHuman());
+      let gasfee = gas.toHuman().min_limit as string;
+      let gasLimit = gasfee.replace(/,/g, "");
+      console.log("gasLimit is.....", gasLimit);
       const message = {
         destination: programId, // programId
         payload: {
@@ -88,7 +95,7 @@ const BuyShare: React.FC = () => {
             amount: "1"
           }
         },
-        gasLimit: gas.toHuman(), // TODO 此次应该设置为gas
+        gasLimit: gasLimit, // TODO 此次应该设置为gas
         value: bigBuyPrice // 将计算出来的价格设置到此处
         // prepaid: true,
         // account: accountId,
@@ -111,7 +118,7 @@ const BuyShare: React.FC = () => {
 
       const tx = gearApi.message.send(message, metaData);
 
-      const tx_hash = await tx.signAndSend(wallet, ({ events }) => {
+      const tx_hash = await tx.signAndSend(keyingPair, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // console.log("tx_hash is:{}", tx_hash);
@@ -131,7 +138,8 @@ const BuyShare: React.FC = () => {
 
   return (
     <button
-      onClick={() => buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f")}
+      // onClick={() => buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f")}
+      onClick={() => buyShare("0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a")} // for local test
     >
       Buy
     </button>
