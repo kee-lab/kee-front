@@ -121,6 +121,7 @@ const BuyShare: React.FC = () => {
       const tx_hash = await tx.signAndSend(keyingPair, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
+      // TODO join subject group
       // console.log("tx_hash is:{}", tx_hash);
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
