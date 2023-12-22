@@ -27,14 +27,14 @@ const BuyShare: React.FC = () => {
     return <div>loading...</div>;
   }
 
-  // // TODO 合约地址。应该从.env或者配置文件中读取该变量
-  // const programId =
-  //   (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
-  //   "0xc87e3c70da3745ddef654869da9ae6fda550e7cc01338a3765e438696363a7af";
-  // TODO 合约地址。应该从.env或者配置文件中读取该变量 local test
+  // TODO 合约地址。应该从.env或者配置文件中读取该变量
   const programId =
     (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
-    "0xb43ac222239662185a8580dccc89bc3c276d84b409d85d6f40369600af7ccb72";
+    "0xc87e3c70da3745ddef654869da9ae6fda550e7cc01338a3765e438696363a7af";
+  // TODO 合约地址。应该从.env或者配置文件中读取该变量 local test
+  // const programId =
+  //   (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
+  //   "0xb43ac222239662185a8580dccc89bc3c276d84b409d85d6f40369600af7ccb72";
 
   console.log("meta is {}", JSON.stringify(metaData));
 

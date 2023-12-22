@@ -54,7 +54,7 @@ export const channelApi = createApi({
     }),
     attendChannel: builder.mutation<void, string>({
       query: (ownerId) => ({
-        url: `/${ownerId}/attend`,
+        url: `/group/${ownerId}/attend`,
         method: "POST"
       })
     }),
