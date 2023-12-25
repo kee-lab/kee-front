@@ -1,6 +1,6 @@
 import { Contract, InterfaceAbi, Wallet, ethers } from "ethers";
 import { memo, useEffect } from "react";
-import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
+import { KEY_UID, KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 import { useAppSelector } from "@/app/store";
 import { shallowEqual } from "react-redux";
@@ -18,16 +18,17 @@ const contractAddress = "0x6c50E3C83d7710DE9a993dac8bBC990e459e3865";
 
 //创建一个新的钱包账户
 export const createNewWallet = async () => {
+  const current_uid: string | null = localStorage.getItem(KEY_UID);
   alert("create default wallet for user");
   await cryptoWaitReady();
-  const provider = new WsProvider("wss://testnet.vara-network.io");
+  // const provider = new WsProvider("wss://testnet.vara-network.io");
 
   const mnemonic = GearKeyring.generateMnemonic();
   const { seed } = GearKeyring.generateSeed(mnemonic);
-  localStorage.setItem(KEY_WALLET_PRIVATE_KEY, mnemonic);
+  localStorage.setItem(KEY_WALLET_PRIVATE_KEY + "_" + current_uid, mnemonic);
   const keyring: KeyringPair = await GearKeyring.fromSeed(seed, "name");
 
-  localStorage.setItem(KEY_WALLET_ADDRESS, keyring.address);
+  localStorage.setItem(KEY_WALLET_ADDRESS + "_" + current_uid, keyring.address);
 
   console.log("keyring.address:", keyring.address);
   console.log("seed:", mnemonic);
@@ -37,7 +38,8 @@ export const createNewWallet = async () => {
 };
 
 export const getGearWallet = async (): Promise<KeyringPair | null> => {
-  const mnemonic = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+  const current_uid: string | null = localStorage.getItem(KEY_UID);
+  const mnemonic = localStorage.getItem(KEY_WALLET_PRIVATE_KEY + "_" + current_uid);
   let wallet = null;
   if (mnemonic) {
     const keyring = await GearKeyring.fromMnemonic(mnemonic, "name");
@@ -51,8 +53,8 @@ const getWallet = (): Wallet | null => {
   // const provider = new ethers.getDefaultProvider('https://goerli.infura.io/v3/9df29b35c83d4e4c87a8cde2034794f1');
   // const privateKey = fs.readFileSync(".secret").toString().trim();
   // const wallet = new ethers.Wallet(privateKey, provider);
-
-  const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY);
+  const current_uid: string | null = localStorage.getItem(KEY_UID);
+  const privateKey = localStorage.getItem(KEY_WALLET_PRIVATE_KEY + "_" + current_uid);
   let wallet = null;
   if (privateKey) {
     const provider = new ethers.JsonRpcProvider(JSON_RPC_URL);

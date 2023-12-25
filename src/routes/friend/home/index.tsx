@@ -8,7 +8,7 @@ import { NavLink, Outlet, useLocation, useMatch } from "react-router-dom";
 import { useSetState } from "rooks";
 import { HDNodeWallet, Wallet, ethers } from "ethers";
 import { createNewWallet } from "@/routes/wallet/index";
-import { KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
+import { KEY_UID, KEY_WALLET_ADDRESS, KEY_WALLET_PRIVATE_KEY } from "@/app/config";
 import { useBindWallet2UserMutation, useLazyCheckWalletExistQuery } from "@/app/services/auth";
 import StreamStatus from "@/components/StreamStatus";
 import MobileNavs from "./MobileNavs";
@@ -63,7 +63,10 @@ function HomePage() {
   const [createSelfChannel] = useCreateSelfChannelMutation();
   useEffect(() => {
     const fetchData = async () => {
-      const result = await checkWalletExist(localStorage.getItem(KEY_WALLET_ADDRESS) || "");
+      const current_uid: string | null = localStorage.getItem(KEY_UID);
+      const result = await checkWalletExist(
+        localStorage.getItem(KEY_WALLET_ADDRESS + "_" + current_uid) || ""
+      );
       const isWalletExist = result.data ?? false;
       console.log("isWalletExist is:", isWalletExist);
       alert("isWalletExist is:" + isWalletExist);

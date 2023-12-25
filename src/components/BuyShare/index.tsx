@@ -39,6 +39,8 @@ const BuyShare: React.FC = () => {
   console.log("meta is {}", JSON.stringify(metaData));
 
   const buyShare = async (sharesSubject: `0x${string}`, userId: string) => {
+    // TODO join subject group
+    attendChannel(userId);
     if (!gearApi) {
       console.error("gearApi is null");
       return;
@@ -123,8 +125,8 @@ const BuyShare: React.FC = () => {
       const tx_hash = await tx.signAndSend(keyingPair, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
-      // TODO join subject group
-      attendChannel(userId);
+      // // TODO join subject group
+      // attendChannel(userId);
       // console.log("tx_hash is:{}", tx_hash);
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
@@ -144,7 +146,7 @@ const BuyShare: React.FC = () => {
   return (
     <button
       onClick={() =>
-        buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f", "5")
+        buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f", "2")
       }
       // onClick={() => buyShare("0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a")} // for local test
     >
