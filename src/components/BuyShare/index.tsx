@@ -8,10 +8,13 @@ import MetaText from "@/assets/gear_friend_share.meta.txt";
 import { ethers } from "ethers";
 import { u8aToHex } from "@polkadot/util/u8a/toHex";
 import { useAttendChannelMutation } from "@/app/services/channel";
+import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 
-const BuyShare: React.FC = () => {
+const BuyShare: React.FC = (props: any) => {
+  const { subjectUid } = props;
   const [metaData, setMetaData] = React.useState({} as ProgramMetadata);
   const [attendChannel] = useAttendChannelMutation();
+  const [getWalletByUid, { data: subject_wallet }] = useLazyGetWalletByUidQuery();
 
   useEffect(() => {
     fetch(MetaText)
@@ -30,15 +33,18 @@ const BuyShare: React.FC = () => {
   // TODO 合约地址。应该从.env或者配置文件中读取该变量
   const programId =
     (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
-    "0xc87e3c70da3745ddef654869da9ae6fda550e7cc01338a3765e438696363a7af";
+    "0x176ab34b059dde82bcc938179b63042153bda6abab61223ca74081ee2469200c";
   // TODO 合约地址。应该从.env或者配置文件中读取该变量 local test
   // const programId =
   //   (process.env.REACT_APP_CONTRACT_ADDRESS as `0x${string}`) ??
   //   "0xb43ac222239662185a8580dccc89bc3c276d84b409d85d6f40369600af7ccb72";
 
-  console.log("meta is {}", JSON.stringify(metaData));
-
-  const buyShare = async (sharesSubject: `0x${string}`, userId: string) => {
+  const buyShare = async (userId: number) => {
+    const keyring = new Keyring();
+    let sharesSubjectResult = await getWalletByUid(userId);
+    console.log("sharesSubjectResult.data is", sharesSubjectResult.data);
+    let sharesSubject = u8aToHex(keyring.decodeAddress(sharesSubjectResult.data));
+    console.log("sharesSubject is", sharesSubject);
     // TODO join subject group
     attendChannel(userId);
     if (!gearApi) {
@@ -46,13 +52,12 @@ const BuyShare: React.FC = () => {
       return;
     }
 
-    const keyring = new Keyring();
     const keyingPair: KeyringPair | null = await getGearWallet();
     // 获取用户的地址
     let address = keyingPair?.address;
     console.log("wallet address is", address);
     let wallet = u8aToHex(keyring.decodeAddress(address));
-    console.log("wallet is:{}", wallet);
+    console.log("buyerWallet is:{}", wallet);
     // query the price of state，
     const buyPriceAfterFeeResponse = await gearApi.programState.read(
       {
@@ -143,16 +148,7 @@ const BuyShare: React.FC = () => {
     // }
   };
 
-  return (
-    <button
-      onClick={() =>
-        buyShare("0x7c7f79efedd289ff243a1cb812ce42ba761796649f6beb69685c534b1221880f", "2")
-      }
-      // onClick={() => buyShare("0xec59e48cf877dfab6e6ba04b24d29349f11cf0bcfa44d04d7b875397225a1b2a")} // for local test
-    >
-      Buy
-    </button>
-  );
+  return <button onClick={() => buyShare(subjectUid)}>Buy</button>;
 };
 
 export default BuyShare;
