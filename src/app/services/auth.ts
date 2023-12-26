@@ -213,16 +213,7 @@ export const authApi = createApi({
       }
     }),
     getAuthByTwitter: builder.query<string, void>({
-      query: () => ({ url: "/user/getTwitterIdSelf" }),
-      async onQueryStarted(params, { dispatch, queryFulfilled }) {
-        try {
-          const { data: uid } = await queryFulfilled;
-          dispatch(updateAuthTwitter(uid));
-        } catch (e) {
-          console.error("api authTwitter error", e);
-          dispatch(updateAuthTwitter("0"));
-        }
-      }
+      query: () => ({ url: "/user/getTwitterIdSelf" })
     }),
     checkWalletExist: builder.query<boolean, string>({
       query: (wallet_address) => ({

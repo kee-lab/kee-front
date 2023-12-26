@@ -24,7 +24,7 @@ const RequireNoTwitterAuth: FC<Props> = ({ children, redirectTo = "/twitterAuth"
   //查询用户状态，是否授权过twitter。
   const { data: twitterId } = useGetAuthByTwitterQuery();
   console.log("query-----------------");
-  console.log(twitterId?.toString());
+  console.log("twitterId?.toString() is", twitterId?.toString());
   let authTwitter = false;
   if (twitterId !== "0") {
     authTwitter = true;
