@@ -33,7 +33,10 @@ const SessionList: FC<Props> = ({ tempSession }) => {
   const userMessage = useAppSelector((store) => store.userMessage.byId, shallowEqual);
   const channelMessage = useAppSelector((store) => store.channelMessage, shallowEqual);
 
+  let newChannelIDs: number[] = [1, 2, 3];
+
   useEffect(() => {
+    debugger;
     // const pinDMs=
     const getSessionObj = (id: number, type: "dm" | "channel") => {
       const mids = type == "dm" ? userMessage[id] : channelMessage[id];
@@ -72,7 +75,7 @@ const SessionList: FC<Props> = ({ tempSession }) => {
         return null;
       })
       .filter((id) => !!id);
-    const cSessions = channelIDs
+    const cSessions = newChannelIDs
       .filter((id) => {
         return !channelPinIds.includes(id);
       })
