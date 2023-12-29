@@ -27,11 +27,11 @@ function HomePage() {
   console.log("in home page!!!");
   const guest = useAppSelector((store) => store.authData.guest, shallowEqual);
   // preload basic data
-  // const { success } = usePreload();
-  // console.info("preload success", success);
+  const { success } = usePreload();
+  console.info("preload success", success);
   // if (!success) {
   //   return <Loading reload={true} fullscreen={true} context="home-route" />;
-  //
+  // }
 
   const [logoutConfirm, setLogoutConfirm] = useState(false);
   const loginUid = useAppSelector((store) => store.authData.user?.uid ?? 0, shallowEqual);
