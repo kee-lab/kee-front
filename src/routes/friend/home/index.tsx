@@ -69,7 +69,7 @@ function HomePage() {
       );
       const isWalletExist = result.data ?? false;
       console.log("isWalletExist is:", isWalletExist);
-      alert("isWalletExist is:" + isWalletExist);
+      // alert("isWalletExist is:" + isWalletExist);
       if (!isWalletExist) {
         let wallet = await createNewWallet();
         bindWallet2User(wallet);

@@ -28,7 +28,6 @@ const channelsSlice = createSlice({
       return initialState;
     },
     fillChannels(state, action: PayloadAction<StoredChannel[]>) {
-      debugger;
       const channels = action.payload || [];
       state.ids = channels.map(({ gid }) => gid);
 
@@ -43,7 +42,6 @@ const channelsSlice = createSlice({
       });
     },
     addChannel(state, action: PayloadAction<Channel>) {
-      debugger;
       const ch = action.payload;
       const { gid, avatar_updated_at } = ch;
       if (!state.ids.includes(+gid)) {
