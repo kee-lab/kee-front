@@ -75,39 +75,3 @@ Discuss collaboration: han@privoce.com or https://bridger.chat/han
 Telegram group: https://t.me/opencfdchannel VoceChat: https://voce.chat
 
 Telegram channel: https://t.me/vocechat_group VoceChat Channel: https://privoce.voce.chat
-
-{/_ <ViewportList viewportRef={ref} items={twitterUsers}>
-{(twitterUser: TwitterUserInfo) => {
-return (
-<li
-key={twitterUser.uid}
-// onClick={buyShare.bind(null, twitterUser.uid)}
-className="w-full flex items-center justify-between px-3 py-2 rounded-md md:hover:bg-slate-50 md:dark:hover:bg-gray-800" >
-<div className="flex gap-4 items-stretch">
-<div>{twitterUser.uid}</div>
-<img
-                    className="overflow-hidden rounded-full h-12 w-12"
-                    src={twitterUser.profile_image_url}
-                    alt=""
-                  />
-<div className="flex flex-col justify-center">
-<span className="font-bold text-md text-gray-600 dark:text-white flex items-center gap-1">
-{twitterUser.username}
-</span>
-<div className="flex">
-<span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
-Created: {convertToRelativeTime(twitterUser.created_time)}&nbsp;
-</span>
-<span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
-| Price: {twitterUser.price / 1000000000000}
-</span>
-</div>
-<div>
-<BuyShare subjectUid={twitterUser.uid}></BuyShare>
-</div>
-</div>
-</div>
-</li>
-);
-}}
-</ViewportList> _/}

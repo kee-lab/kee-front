@@ -10,8 +10,11 @@ import { u8aToHex } from "@polkadot/util/u8a/toHex";
 import { useAttendChannelMutation } from "@/app/services/channel";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 
-const BuyShare: React.FC = (props: any) => {
-  const { subjectUid } = props;
+interface Props {
+  subjectUid: number;
+}
+
+const BuyShare: React.FC<Props> = ({ subjectUid }) => {
   const [metaData, setMetaData] = React.useState({} as ProgramMetadata);
   const [attendChannel] = useAttendChannelMutation();
   const [getWalletByUid, { data: subject_wallet }] = useLazyGetWalletByUidQuery();

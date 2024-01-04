@@ -41,6 +41,7 @@ const AuthTwitterPage = lazy(() => import("./authTwitter"));
 const AuthTwitterCodePage = lazy(() => import("./authTwitter/authTwitterCode"));
 const MyWalletPage = lazy(() => import("./wallet"));
 const NewPostPage = lazy(() => import("./explore/newPosts"));
+const ExploreProfile = lazy(() => import("./explore/profile"));
 
 let toastId: string;
 const PageRoutes = () => {
@@ -297,6 +298,14 @@ const PageRoutes = () => {
               element={
                 <LazyIt>
                   <NewPostPage />
+                </LazyIt>
+              }
+            />
+            <Route
+              path="profile/:user_id"
+              element={
+                <LazyIt>
+                  <ExploreProfile />
                 </LazyIt>
               }
             />

@@ -66,9 +66,13 @@ function newPostPage() {
                     className={({ isActive }) =>
                       `rounded-md md:hover:bg-gray-500/10 ${isActive ? "bg-gray-500/10" : ""}`
                     }
-                    to={`/users/${twitterUser.uid}`}
+                    to={`/explore/profile/${twitterUser.uid}`}
                   >
-                    <UserShare uid={twitterUser.uid} enableContextMenu={true} />
+                    <UserShare
+                      twitterUser={twitterUser}
+                      uid={twitterUser.uid}
+                      enableContextMenu={true}
+                    />
                   </NavLink>
                 );
               }}

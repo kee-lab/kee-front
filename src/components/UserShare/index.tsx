@@ -11,6 +11,9 @@ import Avatar from "../Avatar";
 import Profile from "../Profile";
 import ContextMenu from "./ContextMenu";
 import { shallowEqual } from "react-redux";
+import { TwitterUserInfo } from "@/types/user";
+import { convertToRelativeTime } from "@/utils";
+import BuyShare from "../BuyShare";
 
 interface Props {
   uid: number;
@@ -23,6 +26,7 @@ interface Props {
   avatarSize?: number;
   enableContextMenu?: boolean;
   enableNavToSetting?: boolean;
+  twitterUser: TwitterUserInfo;
 }
 
 const UserShare: FC<Props> = ({
@@ -35,7 +39,8 @@ const UserShare: FC<Props> = ({
   compact = false,
   avatarSize = 32,
   enableContextMenu = false,
-  enableNavToSetting = false
+  enableNavToSetting = false,
+  twitterUser
 }) => {
   const navigate = useNavigate();
   const { visible: contextMenuVisible, handleContextMenuEvent, hideContextMenu } = useContextMenu();
@@ -66,19 +71,12 @@ const UserShare: FC<Props> = ({
   );
   const statusElement = showStatus ? <div className={statusClass}></div> : null;
   return (
-    <ContextMenu
-      cid={cid}
-      uid={uid}
-      enable={enableContextMenu}
-      visible={contextMenuVisible}
-      hide={hideContextMenu}
+    <div
+      key={twitterUser.uid}
+      // onClick={buyShare.bind(null, twitterUser.uid)}
+      className="w-full flex items-center justify-between px-3 py-2 rounded-md md:hover:bg-slate-50 md:dark:hover:bg-gray-800"
     >
-      <div
-        className={containerClass}
-        onClick={enableNavToSetting ? handleNavToSetting : undefined}
-        onDoubleClick={dm ? handleDoubleClick : undefined}
-        onContextMenu={enableContextMenu ? handleContextMenuEvent : undefined}
-      >
+      <div className="flex gap-4 items-stretch">
         <div
           className="cursor-pointer relative"
           style={{ width: `${avatarSize}px`, height: `${avatarSize}px` }}
@@ -87,26 +85,31 @@ const UserShare: FC<Props> = ({
             className="w-full h-full rounded-full object-cover"
             width={avatarSize}
             height={avatarSize}
-            src={curr.avatar}
+            src={twitterUser.profile_image_url}
             name={curr.name}
             alt="avatar"
           />
-          {curr.is_bot ? (
-            <IconBot
-              className={clsx("absolute -bottom-[2.5px] -right-[2.5px]", "!w-[15px] !h-[15px]")}
-            />
-          ) : (
-            statusElement
-          )}
+          {statusElement}
         </div>
-        {!compact && (
-          <span className={nameClass} title={curr?.name}>
-            {curr?.name}
+        <div className="flex flex-col justify-center">
+          <span className="font-bold text-md text-gray-600 dark:text-white flex items-center gap-1">
+            {twitterUser.username}
           </span>
-        )}
-        {owner && <IconOwner />}
+          <div className="flex">
+            <span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
+              Created: {convertToRelativeTime(twitterUser.created_time)}&nbsp;
+            </span>
+            <span className="text-sm text-gray-600 dark:text-white flex items-center gap-1">
+              | Price: {twitterUser.price / 1000000000000}
+            </span>
+          </div>
+          <div>{twitterUser.uid}</div>
+          <div>
+            <BuyShare subjectUid={twitterUser.uid}></BuyShare>
+          </div>
+        </div>
       </div>
-    </ContextMenu>
+    </div>
   );
 };
 
