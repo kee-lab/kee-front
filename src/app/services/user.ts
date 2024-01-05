@@ -68,6 +68,9 @@ export const userApi = createApi({
     getWalletByUid: builder.query<string, number>({
       query: (uid) => ({ url: `/user/getWalletByUid/${uid}` })
     }),
+    getTwitterUserByUid: builder.query<TwitterUserInfo, number>({
+      query: (uid) => ({ url: `/user/getTwitterUserByUid/${uid}` })
+    }),
     getContacts: builder.query<ContactResponse[], void>({
       query: () => ({ url: `/user/contacts` }),
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
@@ -255,6 +258,7 @@ export const userApi = createApi({
 export const {
   useLazyGetUsersQuery,
   useLazyGetTwitterListLastQuery,
+  useLazyGetTwitterUserByUidQuery,
   useLazyGetWalletByUidQuery,
   useGetUserByAdminQuery,
   useUpdateAvatarByAdminMutation,

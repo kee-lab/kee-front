@@ -23,6 +23,7 @@ import serverReducer from "./slices/server";
 import uiReducer from "./slices/ui";
 import usersReducer from "./slices/users";
 import voiceReducer from "./slices/voice";
+import twitterUserReducer from "./slices/twitter.users";
 
 const reducer = combineReducers({
   authData: authDataReducer,
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   server: serverReducer,
   favorites: favoritesReducer,
   users: usersReducer,
+  twitterUsers: twitterUserReducer,
   channels: channelsReducer,
   reactionMessage: reactionMsgReducer,
   userMessage: userMsgReducer,
