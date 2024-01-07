@@ -16,6 +16,7 @@ import { shallowEqual } from "react-redux";
 import { convertToRelativeTime } from "@/utils";
 import { TwitterUserInfo } from "@/types/user";
 import { useLazyGetTwitterUserByUidQuery } from "@/app/services/user";
+import BuyShare from "../BuyShare";
 
 interface Props {
   uid: number;
@@ -69,13 +70,20 @@ const ProfileShare: FC<Props> = ({ uid, type = "embed", cid }) => {
     let twitterUserInfo: TwitterUserInfo = twitterUser!;
     return (
       <div className={containerClass}>
-        <Avatar
-          width={80}
-          height={80}
-          className="rounded-full w-20 h-20 object-cover"
-          src={avatar}
-          name={name}
-        />
+        <div className="flex">
+          <div>
+            <Avatar
+              width={80}
+              height={80}
+              className="rounded-full w-20 h-20 object-cover"
+              src={avatar}
+              name={name}
+            />
+          </div>
+          <div className="button:-5">
+            <BuyShare subjectUid={twitterUser.uid}></BuyShare>
+          </div>
+        </div>
         <h2 className="text-lg select-text font-bold text-gray-900 dark:text-white">
           {name} <span className="font-normal text-gray-500">#{uid}</span>
         </h2>

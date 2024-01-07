@@ -104,9 +104,6 @@ const UserShare: FC<Props> = ({
             </span>
           </div>
           <div>{twitterUser.uid}</div>
-          <div>
-            <BuyShare subjectUid={twitterUser.uid}></BuyShare>
-          </div>
         </div>
       </div>
     </div>

@@ -48,8 +48,7 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
     console.log("sharesSubjectResult.data is", sharesSubjectResult.data);
     let sharesSubject = u8aToHex(keyring.decodeAddress(sharesSubjectResult.data));
     console.log("sharesSubject is", sharesSubject);
-    // TODO join subject group
-    attendChannel(userId);
+
     if (!gearApi) {
       console.error("gearApi is null");
       return;
@@ -133,6 +132,8 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
       const tx_hash = await tx.signAndSend(keyingPair, ({ events }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
+      // join subject group
+      attendChannel(userId);
       // // TODO join subject group
       // attendChannel(userId);
       // console.log("tx_hash is:{}", tx_hash);
