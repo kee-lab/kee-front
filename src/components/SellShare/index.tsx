@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
-import { CreateType, ProgramMetadata } from "@gear-js/api";
+import { ProgramMetadata } from "@gear-js/api";
 import useGearApi from "@/hooks/useGearApi";
 import Keyring from "@polkadot/keyring";
 import { getGearWallet } from "@/routes/wallet/index";
 import { KeyringPair } from "@polkadot/keyring/types";
 import MetaText from "@/assets/gear_friend_share.meta.txt";
-import { ethers } from "ethers";
 import { u8aToHex } from "@polkadot/util/u8a/toHex";
-import { useAttendChannelMutation } from "@/app/services/channel";
+import { useAttendChannelMutation, useOutChannelMutation } from "@/app/services/channel";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 import { REACT_APP_CONTRACT_ADDRESS } from "@/app/config";
+import { color } from "framer-motion";
 
 interface Props {
   subjectUid: number;
 }
 
-const BuyShare: React.FC<Props> = ({ subjectUid }) => {
+const SellShare: React.FC<Props> = ({ subjectUid }) => {
   const [metaData, setMetaData] = React.useState({} as ProgramMetadata);
-  const [attendChannel] = useAttendChannelMutation();
+  const [outChannel] = useOutChannelMutation();
   const [getWalletByUid, { data: subject_wallet }] = useLazyGetWalletByUidQuery();
 
   useEffect(() => {
@@ -34,13 +34,11 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
     return <div>loading...</div>;
   }
 
-  console.log("REACT_APP_CONTRACT_ADDRESS", REACT_APP_CONTRACT_ADDRESS);
-  // 合约地址。从config中读取该变量
   const programId = REACT_APP_CONTRACT_ADDRESS as `0x${string}`;
 
-  const buyShare = async (userId: number) => {
+  const sellShare = async (shareUserId: number) => {
     const keyring = new Keyring();
-    let sharesSubjectResult = await getWalletByUid(userId);
+    let sharesSubjectResult = await getWalletByUid(shareUserId);
     console.log("sharesSubjectResult.data is", sharesSubjectResult.data);
     let sharesSubject = u8aToHex(keyring.decodeAddress(sharesSubjectResult.data));
     console.log("sharesSubject is", sharesSubject);
@@ -57,11 +55,11 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
     let wallet = u8aToHex(keyring.decodeAddress(address));
     console.log("buyerWallet is:{}", wallet);
     // query the price of state，
-    const buyPriceAfterFeeResponse = await gearApi.programState.read(
+    const sellPriceAfterFeeResponse = await gearApi.programState.read(
       {
         programId,
         payload: {
-          BuyPriceAfterFee: {
+          SellPriceAfterFee: {
             shares_subject: sharesSubject,
             amount: 1
           }
@@ -69,24 +67,23 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
       },
       metaData
     );
-    console.log("buyPriceAfterFeeResponse is:{}", buyPriceAfterFeeResponse.toHuman());
-    const buyPriceAfterFee = buyPriceAfterFeeResponse.toHuman() as any;
+    console.log("sellPriceAfterFeeResponse is:{}", sellPriceAfterFeeResponse.toHuman());
+    const sellPriceAfterFee = sellPriceAfterFeeResponse.toHuman() as any;
     // TODO 该价格为购买好友share的价格，将该值转成bigNumber并设置到购买函数的出价内。
-    const buyPrice = buyPriceAfterFee.Price;
-    const bigBuyPrice = buyPrice.replace(/,/g, "");
-    console.log("buyPrice is:", bigBuyPrice);
+    const sellPrice = sellPriceAfterFee.Price;
+    const sellBuyPrice = sellPrice.replace(/,/g, "");
 
     try {
       const gas = await gearApi.program.calculateGas.handle(
         wallet, // source id TODO 此次应该设置为用户钱包地址
         programId, // program id
         {
-          BuyShare: {
+          SellShare: {
             shares_subject: sharesSubject,
             amount: 1
           }
         }, // payload
-        bigBuyPrice, // value 将价格设置到此处
+        0, // value 将价格设置到此处
         true, // allow other panics
         metaData
       );
@@ -97,13 +94,13 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
       const message = {
         destination: programId, // programId
         payload: {
-          BuyShare: {
+          SellShare: {
             shares_subject: sharesSubject,
             amount: "1"
           }
         },
         gasLimit: gasLimit, // TODO 此次应该设置为gas
-        value: bigBuyPrice // 将计算出来的价格设置到此处
+        value: 0 // 将计算出来的价格设置到此处
         // prepaid: true,
         // account: accountId,
         // if you send message with issued voucher
@@ -129,14 +126,15 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
         events.forEach(({ event }) => console.log(event.toHuman()));
       });
       // join subject group
-      attendChannel(userId);
+      outChannel(shareUserId);
       // // TODO join subject group
       // attendChannel(userId);
       // console.log("tx_hash is:{}", tx_hash);
       // So if you want to use another type you can specify it
       // extrinsic = gearApi.message.send(message, meta, meta.types.other.input);
     } catch (error) {
-      console.error(error);
+      alert(error);
+      console.error("error is:", error);
     }
 
     // try {
@@ -149,10 +147,10 @@ const BuyShare: React.FC<Props> = ({ subjectUid }) => {
   };
 
   return (
-    <button onClick={() => buyShare(subjectUid)}>
-      <span style={{ color: "green", marginRight: "20px", marginLeft: "20px" }}>Buy</span>
+    <button onClick={() => sellShare(subjectUid)}>
+      <span style={{ color: "red" }}>Sell</span>
     </button>
   );
 };
 
-export default BuyShare;
+export default SellShare;

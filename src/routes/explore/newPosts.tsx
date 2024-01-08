@@ -8,7 +8,6 @@ import Ui from "@/app/slices/ui";
 import { getContract } from "../wallet";
 import { useLazyGetWalletByUidQuery } from "@/app/services/user";
 import { convertToRelativeTime } from "@/utils";
-import BuyShare from "@/components/BuyShare";
 import { NavLink } from "react-router-dom";
 import UserShare from "@/components/UserShare";
 

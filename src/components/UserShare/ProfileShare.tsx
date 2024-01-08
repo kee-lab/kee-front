@@ -17,6 +17,7 @@ import { convertToRelativeTime } from "@/utils";
 import { TwitterUserInfo } from "@/types/user";
 import { useLazyGetTwitterUserByUidQuery } from "@/app/services/user";
 import BuyShare from "../BuyShare";
+import SellShare from "../SellShare";
 
 interface Props {
   uid: number;
@@ -69,9 +70,9 @@ const ProfileShare: FC<Props> = ({ uid, type = "embed", cid }) => {
   } else {
     let twitterUserInfo: TwitterUserInfo = twitterUser!;
     return (
-      <div className={containerClass}>
-        <div className="flex">
-          <div>
+      <div className={containerClass} style={{ width: "100%" }}>
+        <div className="flex" style={{ width: "100%" }}>
+          <div style={{ width: "80%", textAlign: "center" }}>
             <Avatar
               width={80}
               height={80}
@@ -81,6 +82,7 @@ const ProfileShare: FC<Props> = ({ uid, type = "embed", cid }) => {
             />
           </div>
           <div className="button:-5">
+            <SellShare subjectUid={twitterUser.uid}></SellShare>
             <BuyShare subjectUid={twitterUser.uid}></BuyShare>
           </div>
         </div>

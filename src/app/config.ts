@@ -76,6 +76,7 @@ export const getLicensePriceList = () => {
       ]
     : ps;
 };
+console.log("process.env.CONTRACT_ADDRESS", process.env.CONTRACT_ADDRESS);
 export const PAYMENT_URL_PREFIX =
   process.env.NODE_ENV === "production"
     ? `https://vera.nicegoodthings.com`
@@ -133,6 +134,8 @@ export const KEY_WALLET_PRIVATE_KEY = "WALLET_PRIVATE_KEY";
 export const KEY_WALLET_MNEMONIC = "WALLET_MNEMONIC";
 export const KEY_WALLET_ADDRESS = "WALLET_ADDRESS";
 export const Emojis = ["👍", "❤️", "😄", "👀", "👎", "🎉", "🙁", "🚀"];
+export const REACT_APP_CONTRACT_ADDRESS =
+  "0x176ab34b059dde82bcc938179b63042153bda6abab61223ca74081ee2469200c";
 export const getInviteLinkExpireList = () => [
   {
     label: i18n.t("auth:invite_expire.min30"),

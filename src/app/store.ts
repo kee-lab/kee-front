@@ -23,7 +23,7 @@ import serverReducer from "./slices/server";
 import uiReducer from "./slices/ui";
 import usersReducer from "./slices/users";
 import voiceReducer from "./slices/voice";
-import twitterUserReducer from "./slices/twitter.users";
+import walletInfoReducer from "./slices/walletInfo";
 
 const reducer = combineReducers({
   authData: authDataReducer,
@@ -33,7 +33,7 @@ const reducer = combineReducers({
   server: serverReducer,
   favorites: favoritesReducer,
   users: usersReducer,
-  twitterUsers: twitterUserReducer,
+  walletInfo: walletInfoReducer,
   channels: channelsReducer,
   reactionMessage: reactionMsgReducer,
   userMessage: userMsgReducer,
@@ -52,7 +52,9 @@ const reducer = combineReducers({
 const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      serializableCheck: false
+    })
       .concat(
         authApi.middleware,
         userApi.middleware,

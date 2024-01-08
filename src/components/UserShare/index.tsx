@@ -13,7 +13,6 @@ import ContextMenu from "./ContextMenu";
 import { shallowEqual } from "react-redux";
 import { TwitterUserInfo } from "@/types/user";
 import { convertToRelativeTime } from "@/utils";
-import BuyShare from "../BuyShare";
 
 interface Props {
   uid: number;

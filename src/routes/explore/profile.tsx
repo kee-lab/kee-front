@@ -8,10 +8,6 @@ import { useParams } from "react-router-dom";
 
 function profilePage() {
   const { user_id = 0 } = useParams();
-  const twitterUserInfo = useAppSelector(
-    (store) => store.twitterUsers.byId[+user_id],
-    shallowEqual
-  );
   return (
     <div className={clsx("flex h-screen md:h-full md:pt-2 md:pb-2.5 md:pr-12")}>
       <div
